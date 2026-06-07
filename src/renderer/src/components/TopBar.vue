@@ -1,0 +1,201 @@
+<template>
+  <div class="topbar">
+    <!-- 左侧：面包屑导航 -->
+    <el-breadcrumb separator="/" class="topbar__breadcrumb">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="categoryStore.activeCategory">
+        {{ categoryStore.activeCategory }}
+      </el-breadcrumb-item>
+      <el-breadcrumb-item v-if="categoryStore.activeSubCategory">
+        {{ categoryStore.activeSubCategory }}
+      </el-breadcrumb-item>
+      <el-breadcrumb-item v-if="toolName">
+        {{ toolName }}
+      </el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <!-- 中间：全局搜索框 -->
+    <div class="topbar__search">
+      <el-autocomplete
+        v-model="searchText"
+        :fetch-suggestions="handleSearch"
+        placeholder="搜索工具..."
+        :prefix-icon="Search"
+        clearable
+        size="default"
+        class="topbar__search-input"
+        @select="handleSelect"
+      >
+        <!-- 自定义搜索结果项 -->
+        <template #default="{ item }">
+          <div class="topbar__search-item">
+            <span class="topbar__search-item-title">{{ item.title }}</span>
+            <span class="topbar__search-item-category">{{ item.category }}</span>
+          </div>
+        </template>
+      </el-autocomplete>
+    </div>
+
+    <!-- 右侧：主题切换 + 设置 -->
+    <div class="topbar__actions">
+      <ThemeToggle />
+      <el-button text class="topbar__settings-btn" @click="goSettings">
+        <el-icon :size="18"><Setting /></el-icon>
+      </el-button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useCategoryStore } from '../stores/categoryStore'
+import ThemeToggle from './ThemeToggle.vue'
+import { Search, Setting } from '@element-plus/icons-vue'
+
+/** 搜索结果项类型（适配 el-autocomplete 的 fetch-suggestions） */
+interface SearchSuggestion {
+  value: string
+  title: string
+  category: string
+  name: string
+}
+
+const route = useRoute()
+const router = useRouter()
+const categoryStore = useCategoryStore()
+
+/** 搜索框文本 */
+const searchText = ref('')
+
+/** 防抖定时器 ID */
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
+
+/**
+ * 当前运行工具的名称（仅在 /tool/:name 路由下有值）
+ */
+const toolName = computed(() => {
+  if (route.name === 'ToolRunner' && route.params.name) {
+    return String(route.params.name)
+  }
+  return null
+})
+
+/**
+ * 防抖搜索处理函数
+ * 按 title、description、category 模糊匹配，300ms 防抖
+ * @param query - 搜索关键词
+ * @param cb - 回调函数，返回搜索结果数组
+ */
+function handleSearch(query: string, cb: (results: SearchSuggestion[]) => void): void {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer)
+  }
+
+  debounceTimer = setTimeout(() => {
+    const trimmed = query.trim().toLowerCase()
+    if (!trimmed) {
+      cb([])
+      return
+    }
+
+    const plugins = categoryStore.allPlugins
+    const results: SearchSuggestion[] = []
+
+    for (const plugin of plugins) {
+      const { title, description, category, name } = plugin.manifest
+      const match =
+        title.toLowerCase().includes(trimmed) ||
+        description.toLowerCase().includes(trimmed) ||
+        category.toLowerCase().includes(trimmed)
+
+      if (match) {
+        results.push({
+          value: title,
+          title,
+          category,
+          name
+        })
+      }
+    }
+
+    cb(results)
+  }, 300)
+}
+
+/**
+ * 选中搜索结果项，跳转到对应工具运行页
+ * @param item - 选中的搜索结果
+ */
+function handleSelect(item: SearchSuggestion): void {
+  router.push({ name: 'ToolRunner', params: { name: item.name } })
+  searchText.value = ''
+}
+
+/**
+ * 跳转到设置页面
+ */
+function goSettings(): void {
+  router.push({ name: 'Settings' })
+}
+</script>
+
+<style scoped>
+.topbar {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
+  background-color: var(--el-bg-color);
+  border-bottom: 1px solid var(--el-border-color-light);
+  gap: 16px;
+}
+
+.topbar__breadcrumb {
+  flex-shrink: 0;
+}
+
+.topbar__search {
+  flex: 1;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.topbar__search-input {
+  width: 100%;
+}
+
+.topbar__search-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.topbar__search-item-title {
+  color: var(--el-text-color-primary);
+  font-size: 14px;
+}
+
+.topbar__search-item-category {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.topbar__settings-btn {
+  color: var(--el-text-color-secondary);
+}
+
+.topbar__settings-btn:hover {
+  color: var(--el-color-primary);
+}
+</style>

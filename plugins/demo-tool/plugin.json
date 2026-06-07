@@ -1,0 +1,10 @@
+{
+  "name": "demo-tool",
+  "version": "1.0.0",
+  "title": "示例工具",
+  "description": "用于测试插件系统的示例工具",
+  "category": "开发工具",
+  "subCategory": "格式化",
+  "icon": "Tools",
+  "main": "index.js"
+}
