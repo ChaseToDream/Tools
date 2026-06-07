@@ -23,10 +23,7 @@
           style="width: 100%"
         />
         <!-- boolean 类型 -->
-        <el-switch
-          v-else-if="item.type === 'boolean'"
-          v-model="formData[item.key]"
-        />
+        <el-switch v-else-if="item.type === 'boolean'" v-model="formData[item.key]" />
       </el-form-item>
     </el-form>
     <el-empty v-else description="此插件无可配置项" />
@@ -79,7 +76,8 @@ async function loadConfig(): Promise<void> {
         data[item.key] = val
       }
     } else {
-      data[item.key] = item.default ?? (item.type === 'number' ? 0 : item.type === 'boolean' ? false : '')
+      data[item.key] =
+        item.default ?? (item.type === 'number' ? 0 : item.type === 'boolean' ? false : '')
     }
   }
   formData.value = data

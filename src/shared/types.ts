@@ -149,12 +149,17 @@ export interface PluginContext {
   }
   /** 文件对话框 */
   dialog: {
-    openFile: (options?: { filters?: { name: string; extensions: string[] }[] }) => Promise<string | null>
+    openFile: (options?: {
+      filters?: { name: string; extensions: string[] }[]
+    }) => Promise<string | null>
     saveFile: (options?: { defaultPath?: string }) => Promise<string | null>
   }
   /** HTTP 请求 */
   http: {
-    fetch: (url: string, options?: { method?: string; headers?: Record<string, string>; body?: string }) => Promise<{ ok: boolean; status: number; data: unknown }>
+    fetch: (
+      url: string,
+      options?: { method?: string; headers?: Record<string, string>; body?: string }
+    ) => Promise<{ ok: boolean; status: number; data: unknown }>
   }
   /** 插件配置读写 */
   config: {

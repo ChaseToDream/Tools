@@ -93,7 +93,9 @@ export const usePluginStore = defineStore('plugin', () => {
       },
       dialog: {
         /** 打开文件选择对话框 */
-        async openFile(options?: { filters?: { name: string; extensions: string[] }[] }): Promise<string | null> {
+        async openFile(options?: {
+          filters?: { name: string; extensions: string[] }[]
+        }): Promise<string | null> {
           return window.pluginSystem.dialog.openFile(options)
         },
         /** 打开保存文件对话框 */
@@ -103,7 +105,10 @@ export const usePluginStore = defineStore('plugin', () => {
       },
       http: {
         /** 发起 HTTP 请求 */
-        async fetch(url: string, options?: { method?: string; headers?: Record<string, string>; body?: string }): Promise<{ ok: boolean; status: number; data: unknown }> {
+        async fetch(
+          url: string,
+          options?: { method?: string; headers?: Record<string, string>; body?: string }
+        ): Promise<{ ok: boolean; status: number; data: unknown }> {
           return window.pluginSystem.http.fetch(url, options)
         }
       },

@@ -1,12 +1,14 @@
 <template>
   <div class="sidebar" :class="{ 'sidebar--collapsed': collapsed }">
     <!-- Logo 区域 -->
-    <div class="sidebar__logo">
-      <el-icon :size="28" class="sidebar__logo-icon">
-        <Box />
-      </el-icon>
-      <span v-show="!collapsed" class="sidebar__logo-text">ToolBox</span>
-    </div>
+    <el-tooltip content="ToolBox" placement="right" :disabled="!collapsed">
+      <div class="sidebar__logo">
+        <div class="sidebar__logo-icon">
+          <el-icon :size="20"><Box /></el-icon>
+        </div>
+        <span v-show="!collapsed" class="sidebar__logo-text">ToolBox</span>
+      </div>
+    </el-tooltip>
 
     <!-- 分类导航菜单 -->
     <el-menu
@@ -17,28 +19,36 @@
       @select="handleMenuSelect"
     >
       <!-- 全部工具 -->
-      <el-menu-item index="__all__">
-        <el-icon><Grid /></el-icon>
-        <template #title>全部工具</template>
-      </el-menu-item>
+      <el-tooltip content="全部工具" placement="right" :disabled="!collapsed">
+        <el-menu-item index="__all__">
+          <el-icon><Grid /></el-icon>
+          <template #title>全部工具</template>
+        </el-menu-item>
+      </el-tooltip>
 
       <!-- 收藏分类 -->
-      <el-menu-item v-if="hasFavorites" index="收藏">
-        <el-icon><Star /></el-icon>
-        <template #title>收藏</template>
-      </el-menu-item>
+      <el-tooltip v-if="hasFavorites" content="收藏" placement="right" :disabled="!collapsed">
+        <el-menu-item index="收藏">
+          <el-icon><Star /></el-icon>
+          <template #title>收藏</template>
+        </el-menu-item>
+      </el-tooltip>
 
       <!-- 最近使用分类 -->
-      <el-menu-item v-if="hasRecent" index="最近使用">
-        <el-icon><Clock /></el-icon>
-        <template #title>最近使用</template>
-      </el-menu-item>
+      <el-tooltip v-if="hasRecent" content="最近使用" placement="right" :disabled="!collapsed">
+        <el-menu-item index="最近使用">
+          <el-icon><Clock /></el-icon>
+          <template #title>最近使用</template>
+        </el-menu-item>
+      </el-tooltip>
 
       <!-- 常用工具分类 -->
-      <el-menu-item v-if="hasFrequent" index="常用工具">
-        <el-icon><TrendCharts /></el-icon>
-        <template #title>常用工具</template>
-      </el-menu-item>
+      <el-tooltip v-if="hasFrequent" content="常用工具" placement="right" :disabled="!collapsed">
+        <el-menu-item index="常用工具">
+          <el-icon><TrendCharts /></el-icon>
+          <template #title>常用工具</template>
+        </el-menu-item>
+      </el-tooltip>
 
       <!-- 普通分类：有子分类用 sub-menu，无子分类用 menu-item -->
       <template v-for="node in categoryTree" :key="node.name">
@@ -67,16 +77,14 @@
 
     <!-- 底部折叠按钮 -->
     <div class="sidebar__footer">
-      <el-button
-        text
-        class="sidebar__collapse-btn"
-        @click="$emit('toggle')"
-      >
-        <el-icon :size="18">
-          <Fold v-if="!collapsed" />
-          <Expand v-else />
-        </el-icon>
-      </el-button>
+      <el-tooltip :content="collapsed ? '展开侧边栏' : '折叠侧边栏'" placement="right">
+        <el-button text class="sidebar__collapse-btn" @click="$emit('toggle')">
+          <el-icon :size="18">
+            <Fold v-if="!collapsed" />
+            <Expand v-else />
+          </el-icon>
+        </el-button>
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -105,9 +113,7 @@ const hasFavorites = computed(() =>
 )
 
 /** 是否存在最近使用分类 */
-const hasRecent = computed(() =>
-  categoryStore.categoryTree.some((n) => n.name === RECENT_CATEGORY)
-)
+const hasRecent = computed(() => categoryStore.categoryTree.some((n) => n.name === RECENT_CATEGORY))
 
 /** 是否存在常用工具分类 */
 const hasFrequent = computed(() =>
@@ -116,7 +122,10 @@ const hasFrequent = computed(() =>
 
 /** 排除收藏、最近使用、常用工具分类后的分类树（这些分类单独渲染） */
 const categoryTree = computed(() =>
-  categoryStore.categoryTree.filter((n) => n.name !== FAVORITE_CATEGORY && n.name !== RECENT_CATEGORY && n.name !== FREQUENT_CATEGORY)
+  categoryStore.categoryTree.filter(
+    (n) =>
+      n.name !== FAVORITE_CATEGORY && n.name !== RECENT_CATEGORY && n.name !== FREQUENT_CATEGORY
+  )
 )
 
 /**
@@ -165,6 +174,7 @@ function handleMenuSelect(index: string): void {
   background-color: var(--el-bg-color);
   border-right: 1px solid var(--el-border-color-light);
   overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar__logo {
@@ -176,11 +186,20 @@ function handleMenuSelect(index: string): void {
   gap: 10px;
   border-bottom: 1px solid var(--el-border-color-light);
   flex-shrink: 0;
+  transition: padding 0.3s ease;
 }
 
 .sidebar__logo-icon {
-  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-3));
+  color: #fff;
   flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
 .sidebar__logo-text {
@@ -189,6 +208,7 @@ function handleMenuSelect(index: string): void {
   color: var(--el-text-color-primary);
   white-space: nowrap;
   overflow: hidden;
+  letter-spacing: -0.3px;
 }
 
 .sidebar--collapsed .sidebar__logo {
@@ -196,16 +216,66 @@ function handleMenuSelect(index: string): void {
   padding: 0;
 }
 
+.sidebar--collapsed .sidebar__logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
 .sidebar__menu {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   border-right: none;
   --el-menu-bg-color: var(--el-bg-color);
+  padding: 8px 0;
+}
+
+/* 菜单项全局样式 */
+.sidebar__menu :deep(.el-menu-item) {
+  margin: 2px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  line-height: 40px;
+}
+
+.sidebar__menu :deep(.el-menu-item:hover) {
+  background-color: var(--el-fill-color-light);
+}
+
+.sidebar__menu :deep(.el-menu-item.is-active) {
+  color: var(--el-color-primary);
+  background-color: var(--el-color-primary-light-9);
+  font-weight: 600;
+}
+
+/* 子菜单标题样式 */
+.sidebar__menu :deep(.el-sub-menu__title) {
+  margin: 2px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.sidebar__menu :deep(.el-sub-menu__title:hover) {
+  background-color: var(--el-fill-color-light);
+}
+
+/* 子菜单内的菜单项多一层缩进 */
+.sidebar__menu :deep(.el-sub-menu .el-menu-item) {
+  margin: 0 8px 0 16px;
+  min-width: 0;
 }
 
 /* 折叠时隐藏菜单文字溢出 */
 .sidebar__menu:not(.el-menu--collapse) {
   width: 240px;
+}
+
+/* 折叠状态下菜单项居中 */
+.sidebar__menu.el-menu--collapse :deep(.el-menu-item) {
+  justify-content: center;
+  margin: 2px 12px;
 }
 
 .sidebar__footer {
@@ -221,9 +291,12 @@ function handleMenuSelect(index: string): void {
   width: 100%;
   height: 100%;
   color: var(--el-text-color-secondary);
+  transition: all 0.2s ease;
+  border-radius: 0;
 }
 
 .sidebar__collapse-btn:hover {
   color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
 }
 </style>

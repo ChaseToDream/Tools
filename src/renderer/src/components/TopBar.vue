@@ -39,13 +39,22 @@
 
     <!-- 右侧：置顶 + 主题切换 + 设置 -->
     <div class="topbar__actions">
-      <el-button text class="topbar__pin-btn" :class="{ 'topbar__pin-btn--active': isPinned }" @click="togglePin">
-        <el-icon :size="18"><Aim /></el-icon>
-      </el-button>
+      <el-tooltip :content="isPinned ? '取消置顶' : '窗口置顶'" placement="bottom">
+        <el-button
+          text
+          class="topbar__pin-btn"
+          :class="{ 'topbar__pin-btn--active': isPinned }"
+          @click="togglePin"
+        >
+          <el-icon :size="18"><Aim /></el-icon>
+        </el-button>
+      </el-tooltip>
       <ThemeToggle />
-      <el-button text class="topbar__settings-btn" @click="goSettings">
-        <el-icon :size="18"><Setting /></el-icon>
-      </el-button>
+      <el-tooltip content="设置" placement="bottom">
+        <el-button text class="topbar__settings-btn" @click="goSettings">
+          <el-icon :size="18"><Setting /></el-icon>
+        </el-button>
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -163,7 +172,9 @@ function goSettings(): void {
 function handleGlobalKeydown(e: KeyboardEvent): void {
   if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'f')) {
     e.preventDefault()
-    const inputEl = document.querySelector('.topbar__search-input .el-input__inner') as HTMLInputElement
+    const inputEl = document.querySelector(
+      '.topbar__search-input .el-input__inner'
+    ) as HTMLInputElement
     if (inputEl) {
       inputEl.focus()
     }
@@ -188,20 +199,39 @@ onUnmounted(() => {
   background-color: var(--el-bg-color);
   border-bottom: 1px solid var(--el-border-color-light);
   gap: 16px;
+  -webkit-app-region: drag;
 }
 
 .topbar__breadcrumb {
   flex-shrink: 0;
+  -webkit-app-region: no-drag;
 }
 
 .topbar__search {
   flex: 1;
-  max-width: 400px;
+  max-width: 420px;
   margin: 0 auto;
+  -webkit-app-region: no-drag;
 }
 
 .topbar__search-input {
   width: 100%;
+}
+
+.topbar__search-input :deep(.el-input__wrapper) {
+  border-radius: 10px;
+  background-color: var(--el-fill-color-light);
+  box-shadow: none;
+  transition: all 0.25s ease;
+}
+
+.topbar__search-input :deep(.el-input__wrapper:hover) {
+  background-color: var(--el-fill-color);
+}
+
+.topbar__search-input :deep(.el-input__wrapper.is-focus) {
+  background-color: var(--el-bg-color);
+  box-shadow: 0 0 0 1px var(--el-color-primary) inset;
 }
 
 .topbar__search-item {
@@ -226,27 +256,35 @@ onUnmounted(() => {
 .topbar__actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex-shrink: 0;
+  -webkit-app-region: no-drag;
 }
 
-.topbar__settings-btn {
-  color: var(--el-text-color-secondary);
-}
-
-.topbar__settings-btn:hover {
-  color: var(--el-color-primary);
-}
-
+.topbar__settings-btn,
 .topbar__pin-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
   color: var(--el-text-color-secondary);
+  transition: all 0.2s ease;
 }
 
+.topbar__settings-btn:hover,
 .topbar__pin-btn:hover {
   color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
 }
 
 .topbar__pin-btn--active {
   color: var(--el-color-primary);
+  background-color: var(--el-color-primary-light-9);
+}
+
+.topbar__pin-btn--active:hover {
+  background-color: var(--el-color-primary-light-8);
 }
 </style>

@@ -96,15 +96,17 @@ onUnmounted(() => {
 .tool-runner__header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 4px 0;
   flex-shrink: 0;
 }
 
 .tool-runner__name {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   color: var(--el-text-color-primary);
+  letter-spacing: -0.3px;
 }
 
 .tool-runner__loading {
@@ -114,5 +116,6 @@ onUnmounted(() => {
 .tool-runner__content {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
 }
 </style>

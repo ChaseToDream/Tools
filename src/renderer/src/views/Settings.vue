@@ -174,7 +174,7 @@
         <div class="settings-section about-section">
           <div class="about-card">
             <h3 class="about-card__name">ToolBox</h3>
-            <p class="about-card__version">版本 0.1.0</p>
+            <span class="about-card__version">v0.1.0</span>
             <el-divider />
             <div class="about-card__info">
               <p>一款基于 Electron 的桌面工具箱应用。</p>
@@ -403,34 +403,45 @@ onMounted(async () => {
 
 <style scoped>
 .settings-page {
+  max-width: 800px;
   padding: 4px 0;
 }
 
 .settings-page__title {
   color: var(--el-text-color-primary);
-  margin-bottom: 16px;
-  font-size: 20px;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
 }
 
 .settings-page__tabs {
   --el-tabs-header-height: 44px;
 }
 
+.settings-page__tabs :deep(.el-tabs__header) {
+  margin-bottom: 20px;
+}
+
 /* 通用设置行 */
 .settings-section {
-  padding: 8px 0;
+  padding: 4px 0;
 }
 
 .settings-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--el-border-color-lighter);
+  padding: 20px 24px;
+  margin-bottom: 4px;
+  background-color: var(--el-bg-color);
+  border-radius: 10px;
+  border: 1px solid var(--el-border-color-lighter);
+  transition: border-color 0.2s ease;
 }
 
-.settings-row:last-child {
-  border-bottom: none;
+.settings-row:hover {
+  border-color: var(--el-border-color-light);
 }
 
 .settings-row__label {
@@ -454,25 +465,27 @@ onMounted(async () => {
 .plugin-toolbar {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .plugin-install {
   margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--el-border-color-lighter);
+  padding: 20px 24px;
+  background-color: var(--el-bg-color);
+  border-radius: 10px;
+  border: 1px solid var(--el-border-color-lighter);
 }
 
 .plugin-install__title {
   color: var(--el-text-color-primary);
   font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 12px;
+  font-weight: 600;
+  margin-bottom: 14px;
 }
 
 .plugin-install__form {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
@@ -486,28 +499,35 @@ onMounted(async () => {
   max-width: 480px;
   width: 100%;
   text-align: center;
-  padding: 32px;
+  padding: 40px 32px;
   background-color: var(--el-bg-color);
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--el-border-color-lighter);
 }
 
 .about-card__name {
   color: var(--el-text-color-primary);
-  font-size: 24px;
-  margin-bottom: 4px;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
 }
 
 .about-card__version {
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
+  display: inline-block;
+  color: var(--el-color-primary);
+  font-size: 13px;
+  font-weight: 500;
+  background-color: var(--el-color-primary-light-9);
+  padding: 2px 12px;
+  border-radius: 12px;
 }
 
 .about-card__info {
   text-align: left;
   color: var(--el-text-color-regular);
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 2;
 }
 
 .about-card__stack {
@@ -517,12 +537,12 @@ onMounted(async () => {
 .about-card__stack h4 {
   color: var(--el-text-color-primary);
   font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
 .about-card__tag {
-  margin: 0 4px 4px 0;
+  margin: 0 6px 6px 0;
 }
 
 .about-card__license {
@@ -534,5 +554,13 @@ onMounted(async () => {
 .data-import-actions {
   display: flex;
   gap: 8px;
+}
+
+/* 设置分区标题 */
+.settings-section h4 {
+  color: var(--el-text-color-primary);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 </style>

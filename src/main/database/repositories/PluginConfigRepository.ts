@@ -35,7 +35,9 @@ export function set(pluginName: string, key: string, value: string): void {
  */
 export function getAll(pluginName: string): PluginConfigRecord[] {
   const db = getDatabase()
-  return db.prepare('SELECT * FROM plugin_config WHERE plugin_name = ?').all(pluginName) as PluginConfigRecord[]
+  return db
+    .prepare('SELECT * FROM plugin_config WHERE plugin_name = ?')
+    .all(pluginName) as PluginConfigRecord[]
 }
 
 /**
@@ -45,5 +47,8 @@ export function getAll(pluginName: string): PluginConfigRecord[] {
  */
 export function deleteConfig(pluginName: string, key: string): void {
   const db = getDatabase()
-  db.prepare('DELETE FROM plugin_config WHERE plugin_name = ? AND config_key = ?').run(pluginName, key)
+  db.prepare('DELETE FROM plugin_config WHERE plugin_name = ? AND config_key = ?').run(
+    pluginName,
+    key
+  )
 }

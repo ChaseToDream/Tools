@@ -41,22 +41,16 @@ export function registerPluginIpcHandlers(): void {
   ipcMain.handle('plugin:reload', (_e, name: string) => reloadPlugin(name))
 
   /** 安装 npm 插件 */
-  ipcMain.handle('plugin:install', (_e, packageName: string) =>
-    installNpmPlugin(packageName)
-  )
+  ipcMain.handle('plugin:install', (_e, packageName: string) => installNpmPlugin(packageName))
 
   /** 卸载 npm 插件 */
-  ipcMain.handle('plugin:uninstall', (_e, name: string) =>
-    uninstallNpmPlugin(name)
-  )
+  ipcMain.handle('plugin:uninstall', (_e, name: string) => uninstallNpmPlugin(name))
 
   /** 获取所有插件信息 */
   ipcMain.handle('plugin:getAll', () => getAllPlugins())
 
   /** 获取插件入口文件路径 */
-  ipcMain.handle('plugin:getEntry', (_e, name: string) =>
-    getPluginEntryPath(name)
-  )
+  ipcMain.handle('plugin:getEntry', (_e, name: string) => getPluginEntryPath(name))
 
   /**
    * 读取插件入口文件内容并返回代码字符串
@@ -81,9 +75,7 @@ export function registerPluginIpcHandlers(): void {
    * 写入文本到系统剪贴板
    * @param text - 要写入的文本
    */
-  ipcMain.handle('clipboard:writeText', (_e, text: string) =>
-    clipboard.writeText(text)
-  )
+  ipcMain.handle('clipboard:writeText', (_e, text: string) => clipboard.writeText(text))
 
   /**
    * 显示系统通知
@@ -98,20 +90,21 @@ export function registerPluginIpcHandlers(): void {
    * 在系统默认浏览器中打开外部链接
    * @param url - 要打开的 URL
    */
-  ipcMain.handle('shell:openExternal', (_e, url: string) =>
-    shell.openExternal(url)
-  )
+  ipcMain.handle('shell:openExternal', (_e, url: string) => shell.openExternal(url))
 
   // ---- 文件对话框 ----
-  ipcMain.handle('dialog:openFile', async (_e, options?: { filters?: { name: string; extensions: string[] }[] }) => {
-    const win = BrowserWindow.getFocusedWindow()
-    if (!win) return null
-    const result = await dialog.showOpenDialog(win, {
-      properties: ['openFile'],
-      filters: options?.filters
-    })
-    return result.canceled ? null : result.filePaths[0]
-  })
+  ipcMain.handle(
+    'dialog:openFile',
+    async (_e, options?: { filters?: { name: string; extensions: string[] }[] }) => {
+      const win = BrowserWindow.getFocusedWindow()
+      if (!win) return null
+      const result = await dialog.showOpenDialog(win, {
+        properties: ['openFile'],
+        filters: options?.filters
+      })
+      return result.canceled ? null : result.filePaths[0]
+    }
+  )
 
   ipcMain.handle('dialog:saveFile', async (_e, options?: { defaultPath?: string }) => {
     const win = BrowserWindow.getFocusedWindow()
@@ -141,19 +134,26 @@ export function registerPluginIpcHandlers(): void {
   })
 
   // ---- HTTP 请求 ----
-  ipcMain.handle('http:fetch', async (_e, url: string, options?: { method?: string; headers?: Record<string, string>; body?: string }) => {
-    try {
-      const resp = await fetch(url, {
-        method: options?.method ?? 'GET',
-        headers: options?.headers,
-        body: options?.body
-      })
-      const data = await resp.json().catch(() => null)
-      return { ok: resp.ok, status: resp.status, data }
-    } catch {
-      return { ok: false, status: 0, data: null }
+  ipcMain.handle(
+    'http:fetch',
+    async (
+      _e,
+      url: string,
+      options?: { method?: string; headers?: Record<string, string>; body?: string }
+    ) => {
+      try {
+        const resp = await fetch(url, {
+          method: options?.method ?? 'GET',
+          headers: options?.headers,
+          body: options?.body
+        })
+        const data = await resp.json().catch(() => null)
+        return { ok: resp.ok, status: resp.status, data }
+      } catch {
+        return { ok: false, status: 0, data: null }
+      }
     }
-  })
+  )
 
   // ---- 窗口置顶 ----
   ipcMain.handle('window:toggleTop', (_e, pinned?: boolean) => {

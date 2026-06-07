@@ -31,10 +31,28 @@ export function updateContextMenu(mainWindow: BrowserWindow): void {
 
   const isPinned = mainWindow.isAlwaysOnTop()
   const contextMenu = Menu.buildFromTemplate([
-    { label: '显示主窗口', click: () => { mainWindow.show(); mainWindow.focus() } },
-    { label: '置顶窗口', type: 'checkbox', checked: isPinned, click: () => { mainWindow.setAlwaysOnTop(!isPinned) } },
+    {
+      label: '显示主窗口',
+      click: () => {
+        mainWindow.show()
+        mainWindow.focus()
+      }
+    },
+    {
+      label: '置顶窗口',
+      type: 'checkbox',
+      checked: isPinned,
+      click: () => {
+        mainWindow.setAlwaysOnTop(!isPinned)
+      }
+    },
     { type: 'separator' },
-    { label: '退出', click: () => { app.quit() } }
+    {
+      label: '退出',
+      click: () => {
+        app.quit()
+      }
+    }
   ])
 
   tray.setContextMenu(contextMenu)

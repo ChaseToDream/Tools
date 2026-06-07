@@ -13,11 +13,15 @@ export function recordUsage(pluginName: string): void {
     .get(pluginName) as { use_count: number } | undefined
 
   if (existing) {
-    db.prepare('UPDATE recent_usage SET use_count = ?, last_used_at = ? WHERE plugin_name = ?')
-      .run(existing.use_count + 1, now, pluginName)
+    db.prepare('UPDATE recent_usage SET use_count = ?, last_used_at = ? WHERE plugin_name = ?').run(
+      existing.use_count + 1,
+      now,
+      pluginName
+    )
   } else {
-    db.prepare('INSERT INTO recent_usage (plugin_name, use_count, last_used_at) VALUES (?, 1, ?)')
-      .run(pluginName, now)
+    db.prepare(
+      'INSERT INTO recent_usage (plugin_name, use_count, last_used_at) VALUES (?, 1, ?)'
+    ).run(pluginName, now)
   }
 }
 
@@ -28,7 +32,9 @@ export function recordUsage(pluginName: string): void {
  */
 export function getRecent(limit: number): RecentUsageRecord[] {
   const db = getDatabase()
-  return db.prepare('SELECT * FROM recent_usage ORDER BY last_used_at DESC LIMIT ?').all(limit) as RecentUsageRecord[]
+  return db
+    .prepare('SELECT * FROM recent_usage ORDER BY last_used_at DESC LIMIT ?')
+    .all(limit) as RecentUsageRecord[]
 }
 
 /**
@@ -38,5 +44,7 @@ export function getRecent(limit: number): RecentUsageRecord[] {
  */
 export function getFrequent(limit: number): RecentUsageRecord[] {
   const db = getDatabase()
-  return db.prepare('SELECT * FROM recent_usage ORDER BY use_count DESC LIMIT ?').all(limit) as RecentUsageRecord[]
+  return db
+    .prepare('SELECT * FROM recent_usage ORDER BY use_count DESC LIMIT ?')
+    .all(limit) as RecentUsageRecord[]
 }

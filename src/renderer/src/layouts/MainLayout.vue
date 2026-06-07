@@ -56,7 +56,7 @@ onMounted(async () => {
   height: 100vh;
   overflow: hidden;
   background-color: var(--el-bg-color);
-  transition: grid-template-columns 0.3s ease;
+  transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .main-layout.sidebar-collapsed {
@@ -75,7 +75,7 @@ onMounted(async () => {
 .main-layout__content {
   grid-area: content;
   overflow-y: auto;
-  padding: 20px;
+  padding: 24px 28px;
   background-color: var(--el-bg-color-page);
 }
 </style>

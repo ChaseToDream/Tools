@@ -21,13 +21,17 @@ export function registerIpcHandlers(): void {
   ipcMain.handle('plugin:update', (_e, name: string, data) => PluginRepo.update(name, data))
   ipcMain.handle('plugin:delete', (_e, name: string) => PluginRepo.deletePlugin(name))
   ipcMain.handle('plugin:getByName', (_e, name: string) => PluginRepo.getByName(name))
-  ipcMain.handle('plugin:getByCategory', (_e, category: string) => PluginRepo.getByCategory(category))
+  ipcMain.handle('plugin:getByCategory', (_e, category: string) =>
+    PluginRepo.getByCategory(category)
+  )
   ipcMain.handle('plugin:getEnabled', () => PluginRepo.getEnabled())
 
   // ---- favorite 命名空间 ----
   ipcMain.handle('favorite:add', (_e, pluginName: string) => FavoriteRepo.add(pluginName))
   ipcMain.handle('favorite:remove', (_e, pluginName: string) => FavoriteRepo.remove(pluginName))
-  ipcMain.handle('favorite:isFavorite', (_e, pluginName: string) => FavoriteRepo.isFavorite(pluginName))
+  ipcMain.handle('favorite:isFavorite', (_e, pluginName: string) =>
+    FavoriteRepo.isFavorite(pluginName)
+  )
   ipcMain.handle('favorite:getAll', () => FavoriteRepo.getAll())
 
   // ---- recent 命名空间 ----
@@ -36,8 +40,16 @@ export function registerIpcHandlers(): void {
   ipcMain.handle('recent:getFrequent', (_e, limit?: number) => RecentRepo.getFrequent(limit ?? 10))
 
   // ---- pluginConfig 命名空间 ----
-  ipcMain.handle('pluginConfig:get', (_e, pluginName: string, key: string) => PluginConfigRepo.get(pluginName, key))
-  ipcMain.handle('pluginConfig:set', (_e, pluginName: string, key: string, value: string) => PluginConfigRepo.set(pluginName, key, value))
-  ipcMain.handle('pluginConfig:getAll', (_e, pluginName: string) => PluginConfigRepo.getAll(pluginName))
-  ipcMain.handle('pluginConfig:delete', (_e, pluginName: string, key: string) => PluginConfigRepo.deleteConfig(pluginName, key))
+  ipcMain.handle('pluginConfig:get', (_e, pluginName: string, key: string) =>
+    PluginConfigRepo.get(pluginName, key)
+  )
+  ipcMain.handle('pluginConfig:set', (_e, pluginName: string, key: string, value: string) =>
+    PluginConfigRepo.set(pluginName, key, value)
+  )
+  ipcMain.handle('pluginConfig:getAll', (_e, pluginName: string) =>
+    PluginConfigRepo.getAll(pluginName)
+  )
+  ipcMain.handle('pluginConfig:delete', (_e, pluginName: string, key: string) =>
+    PluginConfigRepo.deleteConfig(pluginName, key)
+  )
 }

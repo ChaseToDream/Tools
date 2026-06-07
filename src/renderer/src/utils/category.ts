@@ -37,7 +37,7 @@ export function buildCategoryTreeFromPlugins(
 ): CategoryNode[] {
   const categoryMap = new Map<string, Map<string, PluginInfo[]>>()
   const rootPluginsMap = new Map<string, PluginInfo[]>()
-  let otherPlugins: PluginInfo[] = []
+  const otherPlugins: PluginInfo[] = []
 
   for (const plugin of plugins) {
     const category = plugin.manifest.category?.trim()

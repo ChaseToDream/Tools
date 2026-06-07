@@ -79,14 +79,20 @@ function handleToggleFavorite(): void {
 .tool-card {
   cursor: pointer;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .tool-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--el-box-shadow-light);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.tool-card:active {
+  transform: translateY(-2px);
 }
 
 .tool-card :deep(.el-card__body) {
@@ -94,7 +100,7 @@ function handleToggleFavorite(): void {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding: 20px 16px;
+  padding: 24px 16px 20px;
 }
 
 .tool-card__icon {
@@ -103,17 +109,26 @@ function handleToggleFavorite(): void {
   justify-content: center;
   width: 56px;
   height: 56px;
-  border-radius: 12px;
-  background-color: var(--el-color-primary-light-9);
+  border-radius: 14px;
+  background: linear-gradient(
+    135deg,
+    var(--el-color-primary-light-7),
+    var(--el-color-primary-light-9)
+  );
   color: var(--el-color-primary);
   flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.tool-card:hover .tool-card__icon {
+  transform: scale(1.08);
 }
 
 .tool-card__info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   text-align: center;
   width: 100%;
   overflow: hidden;
@@ -121,7 +136,7 @@ function handleToggleFavorite(): void {
 
 .tool-card__title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--el-text-color-primary);
   white-space: nowrap;
   overflow: hidden;
@@ -136,22 +151,41 @@ function handleToggleFavorite(): void {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .tool-card__fav {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
   color: var(--el-text-color-placeholder);
-  transition: color 0.2s;
+  background-color: var(--el-bg-color);
+  transition: all 0.25s ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.tool-card:hover .tool-card__fav {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tool-card__fav--active {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  color: var(--el-color-warning);
+  background-color: var(--el-color-warning-light-9);
 }
 
 .tool-card__fav:hover {
   color: var(--el-color-warning);
-}
-
-.tool-card__fav--active {
-  color: var(--el-color-warning);
+  background-color: var(--el-color-warning-light-8);
+  transform: scale(1.1) !important;
 }
 </style>
