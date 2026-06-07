@@ -19,7 +19,6 @@ export function registerIpcHandlers(): void {
   ipcMain.handle('plugin:update', (_e, name: string, data) => PluginRepo.update(name, data))
   ipcMain.handle('plugin:delete', (_e, name: string) => PluginRepo.deletePlugin(name))
   ipcMain.handle('plugin:getByName', (_e, name: string) => PluginRepo.getByName(name))
-  ipcMain.handle('plugin:getAll', () => PluginRepo.getAll())
   ipcMain.handle('plugin:getByCategory', (_e, category: string) => PluginRepo.getByCategory(category))
   ipcMain.handle('plugin:getEnabled', () => PluginRepo.getEnabled())
 
