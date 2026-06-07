@@ -42,9 +42,7 @@ export function getAllPlugins(): PluginInfo[] {
  * @returns 该分类下的插件列表
  */
 export function getPluginsByCategory(category: string): PluginInfo[] {
-  return Array.from(registry.values()).filter(
-    (info) => info.manifest.category === category
-  )
+  return Array.from(registry.values()).filter((info) => info.manifest.category === category)
 }
 
 /**

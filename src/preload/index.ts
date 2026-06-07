@@ -1,17 +1,17 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { DbApi, PluginSystemApi, SystemApi } from '../shared/types'
+import type { SystemApi } from '../shared/types'
 
 /**
  * 通过 contextBridge 安全地暴露数据库 API 给渲染进程
  * 渲染进程通过 window.db.config / window.db.plugin / window.db.favorite 访问
  */
-const db: DbApi = {
+const db = {
   config: {
     get: (key: string) => ipcRenderer.invoke('config:get', key),
     set: (key: string, value: string) => ipcRenderer.invoke('config:set', key, value),
     delete: (key: string) => ipcRenderer.invoke('config:delete', key),
     getAll: () => ipcRenderer.invoke('config:getAll')
-  } as DbApi['config'],
+  },
   plugin: {
     insert: (plugin) => ipcRenderer.invoke('plugin:insert', plugin),
     update: (name, data) => ipcRenderer.invoke('plugin:update', name, data),
@@ -20,20 +20,34 @@ const db: DbApi = {
     getAll: () => ipcRenderer.invoke('plugin:getAll'),
     getByCategory: (category) => ipcRenderer.invoke('plugin:getByCategory', category),
     getEnabled: () => ipcRenderer.invoke('plugin:getEnabled')
-  } as DbApi['plugin'],
+  },
   favorite: {
     add: (pluginName) => ipcRenderer.invoke('favorite:add', pluginName),
     remove: (pluginName) => ipcRenderer.invoke('favorite:remove', pluginName),
     isFavorite: (pluginName) => ipcRenderer.invoke('favorite:isFavorite', pluginName),
     getAll: () => ipcRenderer.invoke('favorite:getAll')
-  } as DbApi['favorite']
+  },
+  recent: {
+    record: (pluginName: string) => ipcRenderer.invoke('recent:record', pluginName),
+    getRecent: (limit?: number) => ipcRenderer.invoke('recent:getRecent', limit),
+    getFrequent: (limit?: number) => ipcRenderer.invoke('recent:getFrequent', limit)
+  },
+  pluginConfig: {
+    get: (pluginName: string, key: string) =>
+      ipcRenderer.invoke('pluginConfig:get', pluginName, key),
+    set: (pluginName: string, key: string, value: string) =>
+      ipcRenderer.invoke('pluginConfig:set', pluginName, key, value),
+    getAll: (pluginName: string) => ipcRenderer.invoke('pluginConfig:getAll', pluginName),
+    delete: (pluginName: string, key: string) =>
+      ipcRenderer.invoke('pluginConfig:delete', pluginName, key)
+  }
 }
 
 /**
  * 插件系统 API，暴露给渲染进程使用
  * 渲染进程通过 window.pluginSystem.scan() / .load() 等访问
  */
-const pluginSystem: PluginSystemApi = {
+const pluginSystem = {
   scan: () => ipcRenderer.invoke('plugin:scan'),
   load: (name) => ipcRenderer.invoke('plugin:load', name),
   enable: (name) => ipcRenderer.invoke('plugin:enable', name),
@@ -44,7 +58,30 @@ const pluginSystem: PluginSystemApi = {
   uninstall: (name) => ipcRenderer.invoke('plugin:uninstall', name),
   getAll: () => ipcRenderer.invoke('plugin:getAll'),
   getEntry: (name) => ipcRenderer.invoke('plugin:getEntry', name),
-  readEntry: (name) => ipcRenderer.invoke('plugin:readEntry', name)
+  readEntry: (name) => ipcRenderer.invoke('plugin:readEntry', name),
+  dialog: {
+    openFile: (options?: { filters?: { name: string; extensions: string[] }[] }) =>
+      ipcRenderer.invoke('dialog:openFile', options),
+    saveFile: (options?: { defaultPath?: string }) => ipcRenderer.invoke('dialog:saveFile', options)
+  },
+  fs: {
+    readFile: (path: string) => ipcRenderer.invoke('fs:readFile', path),
+    writeFile: (path: string, content: string) => ipcRenderer.invoke('fs:writeFile', path, content)
+  },
+  http: {
+    fetch: (
+      url: string,
+      options?: { method?: string; headers?: Record<string, string>; body?: string }
+    ) => ipcRenderer.invoke('http:fetch', url, options)
+  },
+  window: {
+    toggleTop: (pinned?: boolean) => ipcRenderer.invoke('window:toggleTop', pinned)
+  },
+  data: {
+    export: () => ipcRenderer.invoke('data:export'),
+    import: (data: unknown, mode: 'merge' | 'overwrite') =>
+      ipcRenderer.invoke('data:import', data, mode)
+  }
 }
 
 /**

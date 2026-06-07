@@ -5,18 +5,11 @@
 
     <!-- 工具卡片网格 -->
     <div v-if="filteredPlugins.length > 0" class="home-page__grid">
-      <ToolCard
-        v-for="plugin in filteredPlugins"
-        :key="plugin.manifest.name"
-        :plugin="plugin"
-      />
+      <ToolCard v-for="plugin in filteredPlugins" :key="plugin.manifest.name" :plugin="plugin" />
     </div>
 
     <!-- 空状态 -->
-    <el-empty
-      v-else
-      description="暂无工具"
-    />
+    <el-empty v-else description="暂无工具" />
   </div>
 </template>
 

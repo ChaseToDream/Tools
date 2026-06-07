@@ -1,11 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { PluginInfo, CategoryNode, FavoriteRecord } from '../../../shared/types'
-import {
-  buildCategoryTreeFromPlugins,
-  FAVORITE_CATEGORY,
-  OTHER_CATEGORY
-} from '../utils/category'
+import { buildCategoryTreeFromPlugins } from '../utils/category'
 
 /**
  * 分类系统 Pinia Store
@@ -27,6 +23,12 @@ export const useCategoryStore = defineStore('category', () => {
   /** 收藏的插件名称集合 */
   const favoriteNames = ref<Set<string>>(new Set())
 
+  /** 最近使用的插件列表 */
+  const recentPlugins = ref<PluginInfo[]>([])
+
+  /** 常用工具插件列表 */
+  const frequentPlugins = ref<PluginInfo[]>([])
+
   /** 当前选中的大类节点 */
   const activeCategoryNode = computed<CategoryNode | undefined>(() => {
     if (!activeCategory.value) return undefined
@@ -38,7 +40,12 @@ export const useCategoryStore = defineStore('category', () => {
    * 同时处理收藏数据，将收藏插件归入"收藏"特殊分类
    */
   function buildCategoryTree(): void {
-    categoryTree.value = buildCategoryTreeFromPlugins(allPlugins.value, favoriteNames.value)
+    categoryTree.value = buildCategoryTreeFromPlugins(
+      allPlugins.value,
+      favoriteNames.value,
+      recentPlugins.value,
+      frequentPlugins.value
+    )
   }
 
   /**
@@ -126,13 +133,30 @@ export const useCategoryStore = defineStore('category', () => {
    */
   async function refreshCategories(): Promise<void> {
     try {
-      const [plugins, favorites] = await Promise.all([
+      const [plugins, favorites, recentRecords, frequentRecords] = await Promise.all([
         window.pluginSystem.getAll(),
-        window.db.favorite.getAll()
+        window.db.favorite.getAll(),
+        window.db.recent.getRecent(20),
+        window.db.recent.getFrequent(10)
       ])
 
       allPlugins.value = plugins
       favoriteNames.value = new Set(favorites.map((f: FavoriteRecord) => f.plugin_name))
+
+      // 将最近使用记录映射为 PluginInfo 列表
+      recentPlugins.value = recentRecords
+        .map((r: { plugin_name: string }) =>
+          plugins.find((p: PluginInfo) => p.manifest.name === r.plugin_name)
+        )
+        .filter((p: PluginInfo | undefined): p is PluginInfo => p !== undefined)
+
+      // 将常用工具记录映射为 PluginInfo 列表
+      frequentPlugins.value = frequentRecords
+        .map((r: { plugin_name: string }) =>
+          plugins.find((p: PluginInfo) => p.manifest.name === r.plugin_name)
+        )
+        .filter((p: PluginInfo | undefined): p is PluginInfo => p !== undefined)
+
       buildCategoryTree()
     } catch (err) {
       console.error('[categoryStore] 刷新分类数据失败:', err)
@@ -153,6 +177,8 @@ export const useCategoryStore = defineStore('category', () => {
     activeSubCategory,
     allPlugins,
     favoriteNames,
+    recentPlugins,
+    frequentPlugins,
     activeCategoryNode,
     buildCategoryTree,
     selectCategory,

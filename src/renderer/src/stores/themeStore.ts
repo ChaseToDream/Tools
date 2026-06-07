@@ -65,7 +65,8 @@ export const useThemeStore = defineStore('theme', () => {
    */
   async function initTheme(): Promise<void> {
     const saved = await window.db.config.get('theme')
-    const theme: Theme = saved === 'dark' || saved === 'light' ? saved : isSystemDark() ? 'dark' : 'light'
+    const theme: Theme =
+      saved === 'dark' || saved === 'light' ? saved : isSystemDark() ? 'dark' : 'light'
     currentTheme.value = theme
     applyThemeToDom(theme)
   }

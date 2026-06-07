@@ -12,10 +12,7 @@
               <span>主题模式</span>
               <span class="settings-row__desc">切换亮色或暗色外观</span>
             </div>
-            <el-radio-group
-              :model-value="themeStore.currentTheme"
-              @change="handleThemeChange"
-            >
+            <el-radio-group :model-value="themeStore.currentTheme" @change="handleThemeChange">
               <el-radio-button value="light">亮色</el-radio-button>
               <el-radio-button value="dark">暗色</el-radio-button>
             </el-radio-group>
@@ -29,8 +26,8 @@
             </div>
             <el-select
               :model-value="settingsStore.settings.language || 'zh-CN'"
-              @change="(val: string) => settingsStore.updateSetting('language', val)"
               style="width: 160px"
+              @change="(val: string) => settingsStore.updateSetting('language', val)"
             >
               <el-option label="中文" value="zh-CN" />
               <el-option label="English" value="en" />
@@ -43,11 +40,7 @@
               <span>插件目录</span>
               <span class="settings-row__desc">本地插件存放位置</span>
             </div>
-            <el-input
-              :model-value="pluginDir"
-              readonly
-              style="max-width: 400px"
-            />
+            <el-input :model-value="pluginDir" readonly style="max-width: 400px" />
           </div>
 
           <!-- 开机自启动 -->
@@ -59,6 +52,18 @@
             <el-switch
               :model-value="settingsStore.settings.autoStart === 'true'"
               @change="(val: boolean) => settingsStore.updateSetting('autoStart', String(val))"
+            />
+          </div>
+
+          <!-- 关闭时最小化到托盘 -->
+          <div class="settings-row">
+            <div class="settings-row__label">
+              <span>关闭时最小化到托盘</span>
+              <span class="settings-row__desc">关闭窗口后保持在系统托盘</span>
+            </div>
+            <el-switch
+              :model-value="settingsStore.settings.minimizeToTray !== 'false'"
+              @change="(val: boolean) => settingsStore.updateSetting('minimizeToTray', String(val))"
             />
           </div>
         </div>
@@ -90,26 +95,42 @@
             <el-table-column prop="manifest.category" label="分类" width="100" />
             <el-table-column label="状态" width="90">
               <template #default="{ row }">
-                <el-tag :type="row.status === 'loaded' ? 'success' : row.status === 'error' ? 'danger' : 'info'" size="small">
+                <el-tag
+                  :type="
+                    row.status === 'loaded' ? 'success' : row.status === 'error' ? 'danger' : 'info'
+                  "
+                  size="small"
+                >
                   {{ statusLabel(row.status) }}
                 </el-tag>
               </template>
             </el-table-column>
             <el-table-column label="来源" width="80">
               <template #default="{ row }">
-                {{ row.manifest.name.startsWith('@') || row.manifest.name.includes('/') ? 'npm' : 'local' }}
+                {{
+                  row.manifest.name.startsWith('@') || row.manifest.name.includes('/')
+                    ? 'npm'
+                    : 'local'
+                }}
               </template>
             </el-table-column>
             <el-table-column label="操作" width="160" fixed="right">
               <template #default="{ row }">
                 <el-switch
                   :model-value="row.status !== 'disabled'"
-                  @change="(val: boolean) => handleTogglePlugin(row.manifest.name, val)"
                   active-text="启用"
                   inactive-text="禁用"
                   inline-prompt
                   style="margin-right: 8px"
+                  @change="(val: boolean) => handleTogglePlugin(row.manifest.name, val)"
                 />
+                <el-button
+                  v-if="row.manifest.config && row.manifest.config.length > 0"
+                  size="small"
+                  text
+                  @click="handleConfig(row)"
+                  >配置</el-button
+                >
                 <el-popconfirm
                   title="确定要卸载此插件吗？"
                   confirm-button-text="确定"
@@ -132,8 +153,8 @@
                 v-model="npmPackage"
                 placeholder="输入 npm 包名，如：toolbox-plugin-hello"
                 :disabled="settingsStore.installing"
-                @keyup.enter="handleInstall"
                 style="max-width: 360px"
+                @keyup.enter="handleInstall"
               />
               <el-button
                 type="primary"
@@ -171,7 +192,37 @@
           </div>
         </div>
       </el-tab-pane>
+
+      <!-- Tab 4: 数据管理 -->
+      <el-tab-pane label="数据管理" name="data">
+        <div class="settings-section">
+          <div class="settings-row">
+            <div class="settings-row__label">
+              <span>导出数据</span>
+              <span class="settings-row__desc">将收藏、配置、使用记录导出为 JSON 文件</span>
+            </div>
+            <el-button @click="handleExport">导出</el-button>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row__label">
+              <span>导入数据</span>
+              <span class="settings-row__desc">从 JSON 文件恢复数据</span>
+            </div>
+            <div class="data-import-actions">
+              <el-button @click="handleImport('merge')">合并导入</el-button>
+              <el-button type="danger" @click="handleImport('overwrite')">覆盖导入</el-button>
+            </div>
+          </div>
+        </div>
+      </el-tab-pane>
     </el-tabs>
+
+    <PluginConfigDialog
+      v-model:visible="configDialogVisible"
+      :plugin-name="configPluginName"
+      :plugin-title="configPluginTitle"
+      :config-items="configPluginItems"
+    />
   </div>
 </template>
 
@@ -181,7 +232,8 @@ import { ElMessage } from 'element-plus'
 import { Refresh } from '@element-plus/icons-vue'
 import { useThemeStore } from '../stores/themeStore'
 import { useSettingsStore } from '../stores/settingsStore'
-import type { PluginStatus } from '../../../shared/types'
+import PluginConfigDialog from '../components/PluginConfigDialog.vue'
+import type { PluginStatus, PluginConfigItem } from '../../../shared/types'
 
 const themeStore = useThemeStore()
 const settingsStore = useSettingsStore()
@@ -197,6 +249,15 @@ const pluginDir = ref('')
 
 /** 技术栈标签列表 */
 const techStack = ['Electron', 'Vue 3', 'TypeScript', 'Element Plus', 'Pinia', 'SQLite']
+
+/** 配置对话框可见性 */
+const configDialogVisible = ref(false)
+/** 当前配置的插件名称 */
+const configPluginName = ref('')
+/** 当前配置的插件标题 */
+const configPluginTitle = ref('')
+/** 当前配置的插件配置项 */
+const configPluginItems = ref<PluginConfigItem[]>([])
 
 /**
  * 将插件状态映射为中文标签
@@ -260,6 +321,73 @@ async function handleInstall(): Promise<void> {
     npmPackage.value = ''
   } catch {
     ElMessage.error(`插件 ${pkg} 安装失败，请检查包名是否正确`)
+  }
+}
+
+/**
+ * 打开插件配置对话框
+ * @param plugin - 插件信息
+ */
+function handleConfig(plugin: {
+  manifest: { name: string; title: string; config?: PluginConfigItem[] }
+}): void {
+  configPluginName.value = plugin.manifest.name
+  configPluginTitle.value = plugin.manifest.title
+  configPluginItems.value = plugin.manifest.config ?? []
+  configDialogVisible.value = true
+}
+
+/**
+ * 导出数据为 JSON 文件
+ */
+async function handleExport(): Promise<void> {
+  try {
+    const data = await window.pluginSystem.data.export()
+    if (!data) {
+      ElMessage.error('导出失败')
+      return
+    }
+    const json = JSON.stringify(data, null, 2)
+    const path = await window.pluginSystem.dialog.saveFile({ defaultPath: 'toolbox-backup.json' })
+    if (path) {
+      const success = await window.pluginSystem.fs.writeFile(path, json)
+      if (success) {
+        ElMessage.success('数据已导出')
+      } else {
+        ElMessage.error('写入文件失败')
+      }
+    }
+  } catch {
+    ElMessage.error('导出失败')
+  }
+}
+
+/**
+ * 导入数据
+ * @param mode - 导入模式：merge 合并 / overwrite 覆盖
+ */
+async function handleImport(mode: 'merge' | 'overwrite'): Promise<void> {
+  try {
+    const path = await window.pluginSystem.dialog.openFile({
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    })
+    if (!path) return
+
+    const content = await window.pluginSystem.fs.readFile(path)
+    if (!content) {
+      ElMessage.error('读取文件失败')
+      return
+    }
+
+    const data = JSON.parse(content)
+    const result = await window.pluginSystem.data.import(data, mode)
+    if (result?.success) {
+      ElMessage.success(mode === 'overwrite' ? '数据已覆盖导入' : '数据已合并导入')
+    } else {
+      ElMessage.error('导入失败：' + (result?.error ?? '未知错误'))
+    }
+  } catch {
+    ElMessage.error('导入失败，请检查文件格式')
   }
 }
 
@@ -400,5 +528,11 @@ onMounted(async () => {
 .about-card__license {
   color: var(--el-text-color-secondary);
   font-size: 13px;
+}
+
+/* 数据管理 */
+.data-import-actions {
+  display: flex;
+  gap: 8px;
 }
 </style>

@@ -20,7 +20,9 @@ export function get(key: string): string | null {
  */
 export function set(key: string, value: string): void {
   const db = getDatabase()
-  db.prepare('INSERT INTO config (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP').run(key, value)
+  db.prepare(
+    'INSERT INTO config (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP'
+  ).run(key, value)
 }
 
 /**

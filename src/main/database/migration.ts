@@ -30,6 +30,21 @@ const MIGRATIONS: string[] = [
     plugin_name TEXT PRIMARY KEY,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (plugin_name) REFERENCES plugins(name)
+  )`,
+
+  /** 插件使用记录 */
+  `CREATE TABLE IF NOT EXISTS recent_usage (
+    plugin_name TEXT PRIMARY KEY,
+    use_count   INTEGER NOT NULL DEFAULT 1,
+    last_used_at TEXT NOT NULL
+  )`,
+
+  /** 插件配置存储 */
+  `CREATE TABLE IF NOT EXISTS plugin_config (
+    plugin_name TEXT NOT NULL,
+    config_key  TEXT NOT NULL,
+    config_value TEXT NOT NULL,
+    PRIMARY KEY (plugin_name, config_key)
   )`
 ]
 

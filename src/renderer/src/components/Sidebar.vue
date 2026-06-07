@@ -28,6 +28,18 @@
         <template #title>收藏</template>
       </el-menu-item>
 
+      <!-- 最近使用分类 -->
+      <el-menu-item v-if="hasRecent" index="最近使用">
+        <el-icon><Clock /></el-icon>
+        <template #title>最近使用</template>
+      </el-menu-item>
+
+      <!-- 常用工具分类 -->
+      <el-menu-item v-if="hasFrequent" index="常用工具">
+        <el-icon><TrendCharts /></el-icon>
+        <template #title>常用工具</template>
+      </el-menu-item>
+
       <!-- 普通分类：有子分类用 sub-menu，无子分类用 menu-item -->
       <template v-for="node in categoryTree" :key="node.name">
         <!-- 有子分类的大类 -->
@@ -72,8 +84,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCategoryStore } from '../stores/categoryStore'
-import { FAVORITE_CATEGORY } from '../utils/category'
-import { Box, Grid, Star, Folder, Fold, Expand } from '@element-plus/icons-vue'
+import { FAVORITE_CATEGORY, RECENT_CATEGORY, FREQUENT_CATEGORY } from '../utils/category'
+import { Box, Grid, Star, Folder, Fold, Expand, Clock, TrendCharts } from '@element-plus/icons-vue'
 
 defineProps<{
   /** 侧边栏是否折叠 */
@@ -92,9 +104,19 @@ const hasFavorites = computed(() =>
   categoryStore.categoryTree.some((n) => n.name === FAVORITE_CATEGORY)
 )
 
-/** 排除收藏分类后的分类树（收藏单独渲染） */
+/** 是否存在最近使用分类 */
+const hasRecent = computed(() =>
+  categoryStore.categoryTree.some((n) => n.name === RECENT_CATEGORY)
+)
+
+/** 是否存在常用工具分类 */
+const hasFrequent = computed(() =>
+  categoryStore.categoryTree.some((n) => n.name === FREQUENT_CATEGORY)
+)
+
+/** 排除收藏、最近使用、常用工具分类后的分类树（这些分类单独渲染） */
 const categoryTree = computed(() =>
-  categoryStore.categoryTree.filter((n) => n.name !== FAVORITE_CATEGORY)
+  categoryStore.categoryTree.filter((n) => n.name !== FAVORITE_CATEGORY && n.name !== RECENT_CATEGORY && n.name !== FREQUENT_CATEGORY)
 )
 
 /**

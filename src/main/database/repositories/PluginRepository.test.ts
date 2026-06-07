@@ -9,7 +9,6 @@ vi.mock('../database', () => ({
 }))
 
 declare global {
-  // eslint-disable-next-line no-var
   var __testDb: Database
 }
 

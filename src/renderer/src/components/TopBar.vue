@@ -17,6 +17,7 @@
     <!-- 中间：全局搜索框 -->
     <div class="topbar__search">
       <el-autocomplete
+        ref="searchInputRef"
         v-model="searchText"
         :fetch-suggestions="handleSearch"
         placeholder="搜索工具..."
@@ -36,8 +37,11 @@
       </el-autocomplete>
     </div>
 
-    <!-- 右侧：主题切换 + 设置 -->
+    <!-- 右侧：置顶 + 主题切换 + 设置 -->
     <div class="topbar__actions">
+      <el-button text class="topbar__pin-btn" :class="{ 'topbar__pin-btn--active': isPinned }" @click="togglePin">
+        <el-icon :size="18"><Aim /></el-icon>
+      </el-button>
       <ThemeToggle />
       <el-button text class="topbar__settings-btn" @click="goSettings">
         <el-icon :size="18"><Setting /></el-icon>
@@ -47,11 +51,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCategoryStore } from '../stores/categoryStore'
 import ThemeToggle from './ThemeToggle.vue'
-import { Search, Setting } from '@element-plus/icons-vue'
+import { Search, Setting, Aim } from '@element-plus/icons-vue'
+import { ElAutocomplete } from 'element-plus'
 
 /** 搜索结果项类型（适配 el-autocomplete 的 fetch-suggestions） */
 interface SearchSuggestion {
@@ -67,6 +72,19 @@ const categoryStore = useCategoryStore()
 
 /** 搜索框文本 */
 const searchText = ref('')
+
+/** 窗口是否置顶 */
+const isPinned = ref(false)
+
+/**
+ * 切换窗口置顶状态
+ */
+async function togglePin(): Promise<void> {
+  isPinned.value = await window.pluginSystem.window.toggleTop()
+}
+
+/** 搜索框组件引用 */
+const searchInputRef = ref<InstanceType<typeof ElAutocomplete> | null>(null)
 
 /** 防抖定时器 ID */
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
@@ -138,6 +156,27 @@ function handleSelect(item: SearchSuggestion): void {
 function goSettings(): void {
   router.push({ name: 'Settings' })
 }
+
+/**
+ * 全局快捷键处理：Ctrl+K / Ctrl+F 聚焦搜索框
+ */
+function handleGlobalKeydown(e: KeyboardEvent): void {
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'f')) {
+    e.preventDefault()
+    const inputEl = document.querySelector('.topbar__search-input .el-input__inner') as HTMLInputElement
+    if (inputEl) {
+      inputEl.focus()
+    }
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleGlobalKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleGlobalKeydown)
+})
 </script>
 
 <style scoped>
@@ -196,6 +235,18 @@ function goSettings(): void {
 }
 
 .topbar__settings-btn:hover {
+  color: var(--el-color-primary);
+}
+
+.topbar__pin-btn {
+  color: var(--el-text-color-secondary);
+}
+
+.topbar__pin-btn:hover {
+  color: var(--el-color-primary);
+}
+
+.topbar__pin-btn--active {
   color: var(--el-color-primary);
 }
 </style>

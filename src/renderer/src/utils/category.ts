@@ -3,6 +3,12 @@ import type { PluginInfo, CategoryNode } from '../../../shared/types'
 /** "收藏"特殊分类名称 */
 export const FAVORITE_CATEGORY = '收藏'
 
+/** "最近使用"特殊分类名称 */
+export const RECENT_CATEGORY = '最近使用'
+
+/** "常用工具"特殊分类名称 */
+export const FREQUENT_CATEGORY = '常用工具'
+
 /** "其他"默认分类名称（无 category 的插件归入此类） */
 export const OTHER_CATEGORY = '其他'
 
@@ -25,7 +31,9 @@ function compareByPinyin(a: string, b: string): number {
  */
 export function buildCategoryTreeFromPlugins(
   plugins: PluginInfo[],
-  favoritePluginNames: Set<string>
+  favoritePluginNames: Set<string>,
+  recentPlugins: PluginInfo[] = [],
+  frequentPlugins: PluginInfo[] = []
 ): CategoryNode[] {
   const categoryMap = new Map<string, Map<string, PluginInfo[]>>()
   const rootPluginsMap = new Map<string, PluginInfo[]>()
@@ -73,6 +81,24 @@ export function buildCategoryTreeFromPlugins(
     })
   }
 
+  // 构建"最近使用"特殊分类
+  if (recentPlugins.length > 0) {
+    nodes.push({
+      name: RECENT_CATEGORY,
+      children: [],
+      plugins: recentPlugins
+    })
+  }
+
+  // 构建"常用工具"特殊分类
+  if (frequentPlugins.length > 0) {
+    nodes.push({
+      name: FREQUENT_CATEGORY,
+      children: [],
+      plugins: frequentPlugins
+    })
+  }
+
   // 构建普通分类节点
   const entries = Array.from(categoryMap.entries())
   for (const [category, subMap] of entries) {
@@ -114,6 +140,22 @@ export function buildCategoryTreeFromPlugins(
   if (favIndex > 0) {
     const [fav] = nodes.splice(favIndex, 1)
     nodes.unshift(fav)
+  }
+
+  // "最近使用"排在收藏之后
+  const recentIndex = nodes.findIndex((n) => n.name === RECENT_CATEGORY)
+  if (recentIndex > 0) {
+    const [recent] = nodes.splice(recentIndex, 1)
+    const insertPos = nodes.findIndex((n) => n.name === FAVORITE_CATEGORY)
+    nodes.splice(insertPos >= 0 ? insertPos + 1 : 0, 0, recent)
+  }
+
+  // "常用工具"排在最近使用之后
+  const freqIndex = nodes.findIndex((n) => n.name === FREQUENT_CATEGORY)
+  if (freqIndex > 0) {
+    const [freq] = nodes.splice(freqIndex, 1)
+    const insertPos = nodes.findIndex((n) => n.name === RECENT_CATEGORY)
+    nodes.splice(insertPos >= 0 ? insertPos + 1 : 0, 0, freq)
   }
 
   return nodes

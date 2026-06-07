@@ -4,6 +4,7 @@ import { initDatabase, closeDatabase } from './database/database'
 import { registerIpcHandlers } from './database/ipc'
 import { loadAllPlugins } from './plugin/lifecycle'
 import { registerPluginIpcHandlers } from './plugin/ipc'
+import { createTray, shouldMinimizeToTray } from './tray'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -24,6 +25,14 @@ app.whenReady().then(async () => {
   registerPluginIpcHandlers()
 
   mainWindow = createMainWindow()
+  createTray(mainWindow)
+
+  mainWindow.on('close', (event) => {
+    if (shouldMinimizeToTray()) {
+      event.preventDefault()
+      mainWindow!.hide()
+    }
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null

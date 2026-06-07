@@ -80,6 +80,42 @@ export const usePluginStore = defineStore('plugin', () => {
         async openExternal(url: string): Promise<void> {
           await window.system.shell.openExternal(url)
         }
+      },
+      fs: {
+        /** 读取文件内容 */
+        async readFile(path: string): Promise<string | null> {
+          return window.pluginSystem.fs.readFile(path)
+        },
+        /** 写入文件内容 */
+        async writeFile(path: string, content: string): Promise<boolean> {
+          return window.pluginSystem.fs.writeFile(path, content)
+        }
+      },
+      dialog: {
+        /** 打开文件选择对话框 */
+        async openFile(options?: { filters?: { name: string; extensions: string[] }[] }): Promise<string | null> {
+          return window.pluginSystem.dialog.openFile(options)
+        },
+        /** 打开保存文件对话框 */
+        async saveFile(options?: { defaultPath?: string }): Promise<string | null> {
+          return window.pluginSystem.dialog.saveFile(options)
+        }
+      },
+      http: {
+        /** 发起 HTTP 请求 */
+        async fetch(url: string, options?: { method?: string; headers?: Record<string, string>; body?: string }): Promise<{ ok: boolean; status: number; data: unknown }> {
+          return window.pluginSystem.http.fetch(url, options)
+        }
+      },
+      config: {
+        /** 读取插件配置 */
+        async get(key: string): Promise<string | null> {
+          return window.db.pluginConfig.get(pluginName, key)
+        },
+        /** 写入插件配置 */
+        async set(key: string, value: string): Promise<void> {
+          await window.db.pluginConfig.set(pluginName, key, value)
+        }
       }
     }
   }
@@ -135,6 +171,9 @@ export const usePluginStore = defineStore('plugin', () => {
       }
 
       pluginComponent.value = component
+
+      // 记录插件使用
+      window.db.recent.record(name)
     } catch (err) {
       pluginError.value = String(err)
       console.error('[pluginStore] 加载插件失败:', err)

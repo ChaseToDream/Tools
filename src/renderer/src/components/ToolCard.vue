@@ -1,9 +1,5 @@
 <template>
-  <el-card
-    class="tool-card"
-    shadow="hover"
-    @click="handleCardClick"
-  >
+  <el-card class="tool-card" shadow="hover" @click="handleCardClick">
     <!-- 图标区域 -->
     <div class="tool-card__icon">
       <el-icon :size="32">
@@ -82,7 +78,9 @@ function handleToggleFavorite(): void {
 <style scoped>
 .tool-card {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   position: relative;
 }
 

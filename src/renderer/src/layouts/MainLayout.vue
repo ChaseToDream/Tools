@@ -1,11 +1,7 @@
 <template>
   <div class="main-layout" :class="{ 'sidebar-collapsed': collapsed }">
     <TopBar class="main-layout__topbar" />
-    <Sidebar
-      class="main-layout__sidebar"
-      :collapsed="collapsed"
-      @toggle="handleToggle"
-    />
+    <Sidebar class="main-layout__sidebar" :collapsed="collapsed" @toggle="handleToggle" />
     <main class="main-layout__content">
       <router-view />
     </main>

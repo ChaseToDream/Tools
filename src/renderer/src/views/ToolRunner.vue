@@ -28,10 +28,7 @@
 
     <!-- 插件运行区域 -->
     <div v-else-if="pluginStore.pluginComponent" class="tool-runner__content">
-      <component
-        :is="pluginStore.pluginComponent"
-        :context="pluginContext"
-      />
+      <component :is="pluginStore.pluginComponent" :context="pluginContext" />
     </div>
   </div>
 </template>

@@ -3,7 +3,13 @@ import { join } from 'path'
 import { app } from 'electron'
 import type { PluginManifest, PluginRecord, PluginSource } from '../../shared/types'
 import { scanPlugins } from './scanner'
-import { registerPlugin, unregisterPlugin, setPluginStatus, setPluginError, getPlugin } from './registry'
+import {
+  registerPlugin,
+  unregisterPlugin,
+  setPluginStatus,
+  setPluginError,
+  getPlugin
+} from './registry'
 import * as PluginRepo from '../database/repositories/PluginRepository'
 
 /**

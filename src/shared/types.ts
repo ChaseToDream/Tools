@@ -15,6 +15,7 @@ export interface PluginManifest {
   icon?: string
   main: string
   dependencies?: string[]
+  config?: PluginConfigItem[]
 }
 
 /** 注册表中的插件信息 */
@@ -141,6 +142,25 @@ export interface PluginContext {
   shell: {
     openExternal: (url: string) => Promise<void>
   }
+  /** 文件读写 */
+  fs: {
+    readFile: (path: string) => Promise<string | null>
+    writeFile: (path: string, content: string) => Promise<boolean>
+  }
+  /** 文件对话框 */
+  dialog: {
+    openFile: (options?: { filters?: { name: string; extensions: string[] }[] }) => Promise<string | null>
+    saveFile: (options?: { defaultPath?: string }) => Promise<string | null>
+  }
+  /** HTTP 请求 */
+  http: {
+    fetch: (url: string, options?: { method?: string; headers?: Record<string, string>; body?: string }) => Promise<{ ok: boolean; status: number; data: unknown }>
+  }
+  /** 插件配置读写 */
+  config: {
+    get: (key: string) => Promise<string | null>
+    set: (key: string, value: string) => Promise<void>
+  }
 }
 
 /** 渲染进程可用的全局 API */
@@ -148,4 +168,36 @@ export interface ExposedApi {
   db: DbApi
   pluginSystem: PluginSystemApi
   system: SystemApi
+}
+
+/** 最近使用记录 */
+export interface RecentUsageRecord {
+  plugin_name: string
+  use_count: number
+  last_used_at: string
+}
+
+/** 插件配置项声明（plugin.json 中定义） */
+export interface PluginConfigItem {
+  key: string
+  label: string
+  type: 'string' | 'number' | 'boolean'
+  default?: string | number | boolean
+}
+
+/** 插件配置记录（数据库表结构） */
+export interface PluginConfigRecord {
+  plugin_name: string
+  config_key: string
+  config_value: string
+}
+
+/** 数据导出格式 */
+export interface ExportData {
+  version: string
+  exportedAt: string
+  favorites: string[]
+  config: Record<string, string>
+  pluginConfig: Record<string, Record<string, string>>
+  usageStats: Record<string, { count: number; lastUsed: string }>
 }

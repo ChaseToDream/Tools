@@ -62,7 +62,10 @@ export class Database {
  * 每次调用 get/run/all 时重新 prepare，因为 sql.js 的 statement 只能遍历一次
  */
 class Statement {
-  constructor(private db: any, private sql: string) {}
+  constructor(
+    private db: any,
+    private sql: string
+  ) {}
 
   /**
    * 执行查询并返回第一行结果
