@@ -12,7 +12,7 @@ export function createTray(mainWindow: BrowserWindow): void {
   const iconPath = join(app.getAppPath(), 'resources', 'icon.svg')
   const icon = nativeImage.createFromPath(iconPath)
   tray = new Tray(icon.resize({ width: 16, height: 16 }))
-  tray.setToolTip('ToolBox')
+  tray.setToolTip('Tools')
 
   updateContextMenu(mainWindow)
 

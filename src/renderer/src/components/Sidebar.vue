@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar" :class="{ 'sidebar--collapsed': collapsed }">
     <!-- Logo 区域 -->
-    <el-tooltip content="ToolBox" placement="right" :disabled="!collapsed">
+    <el-tooltip content="Tools" placement="right" :disabled="!collapsed">
       <div class="sidebar__logo">
         <div class="sidebar__logo-icon">
           <el-icon :size="20"><Box /></el-icon>
         </div>
-        <span v-show="!collapsed" class="sidebar__logo-text">ToolBox</span>
+        <span v-show="!collapsed" class="sidebar__logo-text">Tools</span>
       </div>
     </el-tooltip>
 

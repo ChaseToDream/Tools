@@ -7,11 +7,11 @@ import { runMigrations } from './migration'
 let db: Database.Database | null = null
 
 /**
- * 获取数据库文件路径（用户数据目录/toolbox.db）
+ * 获取数据库文件路径（用户数据目录/tools.db）
  * @returns 数据库文件的绝对路径
  */
 function getDbPath(): string {
-  return join(app.getPath('userData'), 'toolbox.db')
+  return join(app.getPath('userData'), 'tools.db')
 }
 
 /**

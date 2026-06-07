@@ -151,7 +151,7 @@
             <div class="plugin-install__form">
               <el-input
                 v-model="npmPackage"
-                placeholder="输入 npm 包名，如：toolbox-plugin-hello"
+                placeholder="输入 npm 包名，如：tools-plugin-hello"
                 :disabled="settingsStore.installing"
                 style="max-width: 360px"
                 @keyup.enter="handleInstall"
@@ -173,7 +173,7 @@
       <el-tab-pane label="关于" name="about">
         <div class="settings-section about-section">
           <div class="about-card">
-            <h3 class="about-card__name">ToolBox</h3>
+            <h3 class="about-card__name">Tools</h3>
             <span class="about-card__version">v0.1.0</span>
             <el-divider />
             <div class="about-card__info">
@@ -348,7 +348,7 @@ async function handleExport(): Promise<void> {
       return
     }
     const json = JSON.stringify(data, null, 2)
-    const path = await window.pluginSystem.dialog.saveFile({ defaultPath: 'toolbox-backup.json' })
+    const path = await window.pluginSystem.dialog.saveFile({ defaultPath: 'tools-backup.json' })
     if (path) {
       const success = await window.pluginSystem.fs.writeFile(path, json)
       if (success) {

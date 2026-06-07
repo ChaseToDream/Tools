@@ -1,7 +1,7 @@
 {
-  "name": "toolbox",
+  "name": "tools",
   "version": "0.1.0",
-  "description": "ToolBox - Electron + Vue 3 桌面工具箱",
+  "description": "Tools - Electron + Vue 3 桌面工具箱",
   "main": "./out/main/index.js",
   "author": "",
   "license": "MIT",
@@ -17,8 +17,8 @@
     "test:watch": "vitest"
   },
   "build": {
-    "appId": "com.toolbox.app",
-    "productName": "ToolBox",
+    "appId": "com.tools.app",
+    "productName": "Tools",
     "npmRebuild": true,
     "directories": {
       "output": "dist"
@@ -57,7 +57,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "ToolBox"
+      "shortcutName": "Tools"
     }
   },
   "dependencies": {
