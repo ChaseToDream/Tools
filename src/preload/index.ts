@@ -13,18 +13,18 @@ const db = {
     getAll: () => ipcRenderer.invoke('config:getAll')
   },
   plugin: {
-    insert: (plugin) => ipcRenderer.invoke('plugin:insert', plugin),
-    update: (name, data) => ipcRenderer.invoke('plugin:update', name, data),
-    delete: (name) => ipcRenderer.invoke('plugin:delete', name),
-    getByName: (name) => ipcRenderer.invoke('plugin:getByName', name),
+    insert: (plugin: unknown) => ipcRenderer.invoke('plugin:insert', plugin),
+    update: (name: string, data: unknown) => ipcRenderer.invoke('plugin:update', name, data),
+    delete: (name: string) => ipcRenderer.invoke('plugin:delete', name),
+    getByName: (name: string) => ipcRenderer.invoke('plugin:getByName', name),
     getAll: () => ipcRenderer.invoke('plugin:getAll'),
-    getByCategory: (category) => ipcRenderer.invoke('plugin:getByCategory', category),
+    getByCategory: (category: string) => ipcRenderer.invoke('plugin:getByCategory', category),
     getEnabled: () => ipcRenderer.invoke('plugin:getEnabled')
   },
   favorite: {
-    add: (pluginName) => ipcRenderer.invoke('favorite:add', pluginName),
-    remove: (pluginName) => ipcRenderer.invoke('favorite:remove', pluginName),
-    isFavorite: (pluginName) => ipcRenderer.invoke('favorite:isFavorite', pluginName),
+    add: (pluginName: string) => ipcRenderer.invoke('favorite:add', pluginName),
+    remove: (pluginName: string) => ipcRenderer.invoke('favorite:remove', pluginName),
+    isFavorite: (pluginName: string) => ipcRenderer.invoke('favorite:isFavorite', pluginName),
     getAll: () => ipcRenderer.invoke('favorite:getAll')
   },
   recent: {
@@ -49,16 +49,16 @@ const db = {
  */
 const pluginSystem = {
   scan: () => ipcRenderer.invoke('plugin:scan'),
-  load: (name) => ipcRenderer.invoke('plugin:load', name),
-  enable: (name) => ipcRenderer.invoke('plugin:enable', name),
-  disable: (name) => ipcRenderer.invoke('plugin:disable', name),
-  unload: (name) => ipcRenderer.invoke('plugin:unload', name),
-  reload: (name) => ipcRenderer.invoke('plugin:reload', name),
-  install: (packageName) => ipcRenderer.invoke('plugin:install', packageName),
-  uninstall: (name) => ipcRenderer.invoke('plugin:uninstall', name),
+  load: (name: string) => ipcRenderer.invoke('plugin:load', name),
+  enable: (name: string) => ipcRenderer.invoke('plugin:enable', name),
+  disable: (name: string) => ipcRenderer.invoke('plugin:disable', name),
+  unload: (name: string) => ipcRenderer.invoke('plugin:unload', name),
+  reload: (name: string) => ipcRenderer.invoke('plugin:reload', name),
+  install: (packageName: string) => ipcRenderer.invoke('plugin:install', packageName),
+  uninstall: (name: string) => ipcRenderer.invoke('plugin:uninstall', name),
   getAll: () => ipcRenderer.invoke('plugin:getAll'),
-  getEntry: (name) => ipcRenderer.invoke('plugin:getEntry', name),
-  readEntry: (name) => ipcRenderer.invoke('plugin:readEntry', name),
+  getEntry: (name: string) => ipcRenderer.invoke('plugin:getEntry', name),
+  readEntry: (name: string) => ipcRenderer.invoke('plugin:readEntry', name),
   dialog: {
     openFile: (options?: { filters?: { name: string; extensions: string[] }[] }) =>
       ipcRenderer.invoke('dialog:openFile', options),

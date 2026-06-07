@@ -56,7 +56,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useCategoryStore } from '../stores/categoryStore'
 import ThemeToggle from './ThemeToggle.vue'
 import { Search, Setting, Aim } from '@element-plus/icons-vue'
-import { ElAutocomplete } from 'element-plus'
 
 /** 搜索结果项类型（适配 el-autocomplete 的 fetch-suggestions） */
 interface SearchSuggestion {
@@ -83,8 +82,8 @@ async function togglePin(): Promise<void> {
   isPinned.value = await window.pluginSystem.window.toggleTop()
 }
 
-/** 搜索框组件引用 */
-const searchInputRef = ref<InstanceType<typeof ElAutocomplete> | null>(null)
+/** 搜索框组件引用（用于快捷键聚焦） */
+const searchInputRef = ref<any>(null)
 
 /** 防抖定时器 ID */
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
@@ -145,8 +144,9 @@ function handleSearch(query: string, cb: (results: SearchSuggestion[]) => void):
  * 选中搜索结果项，跳转到对应工具运行页
  * @param item - 选中的搜索结果
  */
-function handleSelect(item: SearchSuggestion): void {
-  router.push({ name: 'ToolRunner', params: { name: item.name } })
+function handleSelect(item: Record<string, any>): void {
+  const suggestion = item as SearchSuggestion
+  router.push({ name: 'ToolRunner', params: { name: suggestion.name } })
   searchText.value = ''
 }
 
