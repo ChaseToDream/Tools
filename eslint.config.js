@@ -5,7 +5,18 @@ import prettierConfig from 'eslint-config-prettier'
 import prettierPlugin from 'eslint-plugin-prettier'
 
 export default tseslint.config(
-  { ignores: ['dist', 'out', 'node_modules', 'auto-imports.d.ts', 'components.d.ts'] },
+  {
+    ignores: [
+      'dist',
+      'out',
+      'node_modules',
+      'auto-imports.d.ts',
+      'components.d.ts',
+      'plugins',
+      'examples',
+      'sdk/dist'
+    ]
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/recommended'],

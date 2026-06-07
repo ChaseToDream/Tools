@@ -37,13 +37,16 @@ function manifestToRecord(manifest: PluginManifest, source: PluginSource): Plugi
 
 /**
  * 判断插件 manifest 对应的目录来源
+ * 优先检查开发目录（appPath/plugins），再检查用户数据目录（userData/plugins）
  * @param manifest - 插件 manifest
  * @returns 插件来源类型
  */
 function detectSource(manifest: PluginManifest): PluginSource {
   const devPath = join(app.getAppPath(), 'plugins', manifest.name)
+  const userPath = join(app.getPath('userData'), 'plugins', manifest.name)
   if (existsSync(devPath)) return 'local'
-  return 'npm'
+  if (existsSync(userPath)) return 'npm'
+  return 'local'
 }
 
 /**

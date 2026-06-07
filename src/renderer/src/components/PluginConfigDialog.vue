@@ -55,7 +55,7 @@ const emit = defineEmits<{
 }>()
 
 /** 表单数据（key -> value 映射） */
-const formData = ref<Record<string, any>>({})
+const formData = ref<Record<string, string | number | boolean>>({})
 
 /** 是否正在保存 */
 const saving = ref(false)

@@ -28,9 +28,14 @@ export async function installNpmPlugin(packageName: string): Promise<PluginManif
   /** 在用户插件目录下执行 npm install */
   await runNpmInstall(pluginsDir, packageName)
 
-  /** 从包名提取目录名（去掉 @scope 和 @version） */
-  const dirName = packageName.replace(/^@[^/]+\//, '').replace(/@.+$/, '')
-  const pluginDir = join(pluginsDir, 'node_modules', packageName)
+  /**
+   * 从包名提取 npm 安装后的目录名
+   * 处理 @scope/name@version 和 name@version 格式
+   * @scope/name@1.0.0 -> @scope/name
+   * name@1.0.0 -> name
+   */
+  const packageDir = packageName.replace(/(@[^/]+\/[^@]+)@.+/, '$1').replace(/^([^@]+)@.+/, '$1')
+  const pluginDir = join(pluginsDir, 'node_modules', packageDir)
   const manifestPath = join(pluginDir, 'plugin.json')
 
   if (!existsSync(manifestPath)) {

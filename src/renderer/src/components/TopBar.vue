@@ -153,9 +153,8 @@ function handleSearch(query: string, cb: (results: SearchSuggestion[]) => void):
  * 选中搜索结果项，跳转到对应工具运行页
  * @param item - 选中的搜索结果
  */
-function handleSelect(item: Record<string, any>): void {
-  const suggestion = item as SearchSuggestion
-  router.push({ name: 'ToolRunner', params: { name: suggestion.name } })
+function handleSelect(item: SearchSuggestion): void {
+  router.push({ name: 'ToolRunner', params: { name: item.name } })
   searchText.value = ''
 }
 

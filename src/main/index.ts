@@ -3,7 +3,7 @@ import { createMainWindow } from './window'
 import { initDatabase, closeDatabase } from './database/database'
 import { registerIpcHandlers } from './database/ipc'
 import { loadAllPlugins } from './plugin/lifecycle'
-import { registerPluginIpcHandlers } from './plugin/ipc'
+import { registerPluginIpcHandlers } from './plugin/ipc-handlers'
 import { createTray, shouldMinimizeToTray } from './tray'
 
 let mainWindow: BrowserWindow | null = null

@@ -57,6 +57,16 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   /**
+   * 操作完成后刷新插件列表和分类数据
+   * 提取为内部辅助函数，避免重复代码
+   */
+  async function refreshAfterOperation(): Promise<void> {
+    await loadPlugins()
+    const categoryStore = useCategoryStore()
+    await categoryStore.refreshCategories()
+  }
+
+  /**
    * 安装 npm 插件
    * 安装完成后刷新插件列表和分类数据
    * @param packageName - npm 包名
@@ -65,9 +75,7 @@ export const useSettingsStore = defineStore('settings', () => {
     installing.value = true
     try {
       await window.pluginSystem.install(packageName)
-      await loadPlugins()
-      const categoryStore = useCategoryStore()
-      await categoryStore.refreshCategories()
+      await refreshAfterOperation()
     } catch (err) {
       console.error('[settingsStore] 安装插件失败:', err)
       throw err
@@ -84,9 +92,7 @@ export const useSettingsStore = defineStore('settings', () => {
   async function uninstallPlugin(name: string): Promise<void> {
     try {
       await window.pluginSystem.uninstall(name)
-      await loadPlugins()
-      const categoryStore = useCategoryStore()
-      await categoryStore.refreshCategories()
+      await refreshAfterOperation()
     } catch (err) {
       console.error('[settingsStore] 卸载插件失败:', err)
       throw err
@@ -106,9 +112,7 @@ export const useSettingsStore = defineStore('settings', () => {
       } else {
         await window.pluginSystem.disable(name)
       }
-      await loadPlugins()
-      const categoryStore = useCategoryStore()
-      await categoryStore.refreshCategories()
+      await refreshAfterOperation()
     } catch (err) {
       console.error('[settingsStore] 切换插件状态失败:', err)
       throw err
@@ -122,9 +126,7 @@ export const useSettingsStore = defineStore('settings', () => {
     refreshing.value = true
     try {
       await window.pluginSystem.scan()
-      await loadPlugins()
-      const categoryStore = useCategoryStore()
-      await categoryStore.refreshCategories()
+      await refreshAfterOperation()
     } catch (err) {
       console.error('[settingsStore] 刷新插件失败:', err)
     } finally {
@@ -152,6 +154,7 @@ export const useSettingsStore = defineStore('settings', () => {
     uninstallPlugin,
     togglePlugin,
     refreshPlugins,
-    initialize
+    initialize,
+    refreshAfterOperation
   }
 })
