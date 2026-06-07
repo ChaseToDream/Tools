@@ -34,12 +34,18 @@ function handleToggle(): void {
   justify-content: center;
   border-radius: 8px;
   color: var(--el-text-color-secondary);
-  transition: all 0.2s ease;
+  transition: all var(--tech-transition);
 }
 
 .theme-toggle:hover {
   color: var(--el-color-warning);
   background-color: var(--el-fill-color-light);
+}
+
+html.dark .theme-toggle:hover {
+  color: var(--tech-accent);
+  background-color: rgba(var(--tech-accent-rgb), 0.1);
+  box-shadow: 0 0 8px rgba(var(--tech-accent-rgb), 0.15);
 }
 
 .theme-toggle__icon {

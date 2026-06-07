@@ -91,6 +91,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
+  animation: tech-fade-in 0.4s ease-out both;
 }
 
 .tool-runner__header {
@@ -102,11 +103,27 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
+.tool-runner__header :deep(.el-button) {
+  transition: all var(--tech-transition);
+}
+
+html.dark .tool-runner__header :deep(.el-button:hover) {
+  color: var(--tech-accent);
+  background-color: rgba(var(--tech-accent-rgb), 0.08);
+}
+
 .tool-runner__name {
   font-size: 18px;
   font-weight: 600;
   color: var(--el-text-color-primary);
   letter-spacing: -0.3px;
+}
+
+html.dark .tool-runner__name {
+  background: linear-gradient(90deg, #e2e8f0, var(--tech-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .tool-runner__loading {
@@ -117,5 +134,13 @@ onUnmounted(() => {
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+}
+
+html.dark .tool-runner__content {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(var(--tech-accent-rgb), 0.06);
+  border-radius: var(--tech-radius-md);
+  padding: 20px;
+  backdrop-filter: blur(8px);
 }
 </style>

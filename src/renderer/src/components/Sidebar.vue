@@ -171,10 +171,18 @@ function handleMenuSelect(index: string): void {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--el-bg-color);
-  border-right: 1px solid var(--el-border-color-light);
+  background: var(--tech-glass-bg);
+  backdrop-filter: blur(var(--tech-glass-blur));
+  -webkit-backdrop-filter: blur(var(--tech-glass-blur));
+  border-right: 1px solid var(--tech-glass-border);
   overflow: hidden;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 侧边栏顶部装饰线 */
+html.dark .sidebar {
+  border-right: 1px solid rgba(var(--tech-accent-rgb), 0.1);
+  box-shadow: 1px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar__logo {
@@ -187,6 +195,23 @@ function handleMenuSelect(index: string): void {
   border-bottom: 1px solid var(--el-border-color-light);
   flex-shrink: 0;
   transition: padding 0.3s ease;
+  position: relative;
+}
+
+html.dark .sidebar__logo {
+  border-bottom-color: rgba(var(--tech-accent-rgb), 0.08);
+}
+
+/* Logo 区域底部发光线条 */
+html.dark .sidebar__logo::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--tech-accent-rgb), 0.4), transparent);
 }
 
 .sidebar__logo-icon {
@@ -202,6 +227,11 @@ function handleMenuSelect(index: string): void {
   transition: all 0.3s ease;
 }
 
+html.dark .sidebar__logo-icon {
+  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  box-shadow: 0 0 16px rgba(var(--tech-accent-rgb), 0.35);
+}
+
 .sidebar__logo-text {
   font-size: 18px;
   font-weight: 700;
@@ -209,6 +239,13 @@ function handleMenuSelect(index: string): void {
   white-space: nowrap;
   overflow: hidden;
   letter-spacing: -0.3px;
+}
+
+html.dark .sidebar__logo-text {
+  background: linear-gradient(90deg, #e2e8f0, var(--tech-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .sidebar--collapsed .sidebar__logo {
@@ -227,7 +264,7 @@ function handleMenuSelect(index: string): void {
   overflow-y: auto;
   overflow-x: hidden;
   border-right: none;
-  --el-menu-bg-color: var(--el-bg-color);
+  --el-menu-bg-color: transparent;
   padding: 8px 0;
 }
 
@@ -235,13 +272,18 @@ function handleMenuSelect(index: string): void {
 .sidebar__menu :deep(.el-menu-item) {
   margin: 2px 8px;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all var(--tech-transition);
   min-height: 40px;
   line-height: 40px;
+  position: relative;
 }
 
 .sidebar__menu :deep(.el-menu-item:hover) {
   background-color: var(--el-fill-color-light);
+}
+
+html.dark .sidebar__menu :deep(.el-menu-item:hover) {
+  background-color: rgba(var(--tech-accent-rgb), 0.08);
 }
 
 .sidebar__menu :deep(.el-menu-item.is-active) {
@@ -250,15 +292,25 @@ function handleMenuSelect(index: string): void {
   font-weight: 600;
 }
 
+html.dark .sidebar__menu :deep(.el-menu-item.is-active) {
+  color: var(--tech-accent);
+  background-color: rgba(var(--tech-accent-rgb), 0.12);
+  box-shadow: inset 3px 0 0 var(--tech-accent);
+}
+
 /* 子菜单标题样式 */
 .sidebar__menu :deep(.el-sub-menu__title) {
   margin: 2px 8px;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all var(--tech-transition);
 }
 
 .sidebar__menu :deep(.el-sub-menu__title:hover) {
   background-color: var(--el-fill-color-light);
+}
+
+html.dark .sidebar__menu :deep(.el-sub-menu__title:hover) {
+  background-color: rgba(var(--tech-accent-rgb), 0.08);
 }
 
 /* 子菜单内的菜单项多一层缩进 */
@@ -285,18 +337,40 @@ function handleMenuSelect(index: string): void {
   height: 48px;
   border-top: 1px solid var(--el-border-color-light);
   flex-shrink: 0;
+  position: relative;
+}
+
+html.dark .sidebar__footer {
+  border-top-color: rgba(var(--tech-accent-rgb), 0.08);
+}
+
+/* 底部折叠按钮区域顶部发光线 */
+html.dark .sidebar__footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--tech-accent-rgb), 0.3), transparent);
 }
 
 .sidebar__collapse-btn {
   width: 100%;
   height: 100%;
   color: var(--el-text-color-secondary);
-  transition: all 0.2s ease;
+  transition: all var(--tech-transition);
   border-radius: 0;
 }
 
 .sidebar__collapse-btn:hover {
   color: var(--el-color-primary);
   background-color: var(--el-fill-color-light);
+}
+
+html.dark .sidebar__collapse-btn:hover {
+  color: var(--tech-accent);
+  background-color: rgba(var(--tech-accent-rgb), 0.08);
 }
 </style>

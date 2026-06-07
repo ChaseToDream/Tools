@@ -405,6 +405,7 @@ onMounted(async () => {
 .settings-page {
   max-width: 800px;
   padding: 4px 0;
+  animation: tech-fade-in 0.4s ease-out both;
 }
 
 .settings-page__title {
@@ -413,6 +414,13 @@ onMounted(async () => {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.3px;
+}
+
+html.dark .settings-page__title {
+  background: linear-gradient(90deg, #e2e8f0, var(--tech-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .settings-page__tabs {
@@ -442,6 +450,18 @@ onMounted(async () => {
 
 .settings-row:hover {
   border-color: var(--el-border-color-light);
+}
+
+html.dark .settings-row {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(var(--tech-accent-rgb), 0.06);
+  backdrop-filter: blur(8px);
+  transition: all var(--tech-transition);
+}
+
+html.dark .settings-row:hover {
+  border-color: rgba(var(--tech-accent-rgb), 0.15);
+  box-shadow: 0 0 12px rgba(var(--tech-accent-rgb), 0.06);
 }
 
 .settings-row__label {
@@ -476,6 +496,12 @@ onMounted(async () => {
   border: 1px solid var(--el-border-color-lighter);
 }
 
+html.dark .plugin-install {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(var(--tech-accent-rgb), 0.06);
+  backdrop-filter: blur(8px);
+}
+
 .plugin-install__title {
   color: var(--el-text-color-primary);
   font-size: 14px;
@@ -503,6 +529,14 @@ onMounted(async () => {
   background-color: var(--el-bg-color);
   border-radius: 12px;
   border: 1px solid var(--el-border-color-lighter);
+  transition: all var(--tech-transition);
+}
+
+html.dark .about-card {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(var(--tech-accent-rgb), 0.1);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 24px rgba(var(--tech-accent-rgb), 0.06);
 }
 
 .about-card__name {
@@ -513,6 +547,13 @@ onMounted(async () => {
   letter-spacing: -0.5px;
 }
 
+html.dark .about-card__name {
+  background: linear-gradient(90deg, #e2e8f0, var(--tech-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .about-card__version {
   display: inline-block;
   color: var(--el-color-primary);
@@ -521,6 +562,11 @@ onMounted(async () => {
   background-color: var(--el-color-primary-light-9);
   padding: 2px 12px;
   border-radius: 12px;
+}
+
+html.dark .about-card__version {
+  background-color: rgba(var(--tech-accent-rgb), 0.12);
+  color: var(--tech-accent);
 }
 
 .about-card__info {
@@ -543,6 +589,12 @@ onMounted(async () => {
 
 .about-card__tag {
   margin: 0 6px 6px 0;
+}
+
+html.dark .about-card__tag {
+  background-color: rgba(var(--tech-accent-rgb), 0.08);
+  border-color: rgba(var(--tech-accent-rgb), 0.15);
+  color: var(--tech-accent);
 }
 
 .about-card__license {

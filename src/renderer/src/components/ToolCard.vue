@@ -80,7 +80,8 @@ function handleToggleFavorite(): void {
   cursor: pointer;
   transition:
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.25s ease;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
@@ -91,8 +92,44 @@ function handleToggleFavorite(): void {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
+html.dark .tool-card {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(var(--tech-accent-rgb), 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+html.dark .tool-card:hover {
+  border-color: rgba(var(--tech-accent-rgb), 0.2);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.4),
+    0 0 16px rgba(var(--tech-accent-rgb), 0.1);
+  transform: translateY(-6px);
+}
+
 .tool-card:active {
   transform: translateY(-2px);
+}
+
+html.dark .tool-card:active {
+  transform: translateY(-2px);
+}
+
+/* 暗色主题下卡片顶部扫描线效果 */
+html.dark .tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--tech-accent-rgb), 0.3), transparent);
+  opacity: 0;
+  transition: opacity var(--tech-transition);
+}
+
+html.dark .tool-card:hover::before {
+  opacity: 1;
 }
 
 .tool-card :deep(.el-card__body) {
@@ -117,11 +154,27 @@ function handleToggleFavorite(): void {
   );
   color: var(--el-color-primary);
   flex-shrink: 0;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+html.dark .tool-card__icon {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--tech-accent-rgb), 0.15),
+    rgba(var(--tech-accent-alt-rgb), 0.15)
+  );
+  color: var(--tech-accent);
+  border: 1px solid rgba(var(--tech-accent-rgb), 0.1);
 }
 
 .tool-card:hover .tool-card__icon {
   transform: scale(1.08);
+}
+
+html.dark .tool-card:hover .tool-card__icon {
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(var(--tech-accent-rgb), 0.25);
+  border-color: rgba(var(--tech-accent-rgb), 0.25);
 }
 
 .tool-card__info {
@@ -171,6 +224,11 @@ function handleToggleFavorite(): void {
   transform: scale(0.8);
 }
 
+html.dark .tool-card__fav {
+  background-color: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+}
+
 .tool-card:hover .tool-card__fav {
   opacity: 1;
   transform: scale(1);
@@ -183,9 +241,18 @@ function handleToggleFavorite(): void {
   background-color: var(--el-color-warning-light-9);
 }
 
+html.dark .tool-card__fav--active {
+  color: var(--tech-warning);
+  background-color: rgba(245, 158, 11, 0.15);
+}
+
 .tool-card__fav:hover {
   color: var(--el-color-warning);
   background-color: var(--el-color-warning-light-8);
   transform: scale(1.1) !important;
+}
+
+html.dark .tool-card__fav:hover {
+  background-color: rgba(245, 158, 11, 0.2);
 }
 </style>

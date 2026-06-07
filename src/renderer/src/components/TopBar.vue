@@ -195,10 +195,36 @@ onUnmounted(() => {
   align-items: center;
   height: 56px;
   padding: 0 20px;
-  background-color: var(--el-bg-color);
+  background: var(--tech-glass-bg);
+  backdrop-filter: blur(var(--tech-glass-blur));
+  -webkit-backdrop-filter: blur(var(--tech-glass-blur));
   border-bottom: 1px solid var(--el-border-color-light);
   gap: 16px;
   -webkit-app-region: drag;
+  position: relative;
+}
+
+html.dark .topbar {
+  border-bottom-color: rgba(var(--tech-accent-rgb), 0.08);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 顶部栏底部发光装饰线 */
+html.dark .topbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--tech-accent-rgb), 0.3) 20%,
+    rgba(var(--tech-accent-rgb), 0.5) 50%,
+    rgba(var(--tech-accent-rgb), 0.3) 80%,
+    transparent
+  );
 }
 
 .topbar__breadcrumb {
@@ -231,6 +257,23 @@ onUnmounted(() => {
 .topbar__search-input :deep(.el-input__wrapper.is-focus) {
   background-color: var(--el-bg-color);
   box-shadow: 0 0 0 1px var(--el-color-primary) inset;
+}
+
+html.dark .topbar__search-input :deep(.el-input__wrapper) {
+  background-color: rgba(var(--tech-accent-rgb), 0.04);
+  box-shadow: 0 0 0 1px rgba(var(--tech-accent-rgb), 0.1) inset;
+}
+
+html.dark .topbar__search-input :deep(.el-input__wrapper:hover) {
+  background-color: rgba(var(--tech-accent-rgb), 0.06);
+  box-shadow: 0 0 0 1px rgba(var(--tech-accent-rgb), 0.2) inset;
+}
+
+html.dark .topbar__search-input :deep(.el-input__wrapper.is-focus) {
+  background-color: rgba(var(--tech-accent-rgb), 0.04);
+  box-shadow:
+    0 0 0 1px rgba(var(--tech-accent-rgb), 0.4) inset,
+    0 0 12px rgba(var(--tech-accent-rgb), 0.12);
 }
 
 .topbar__search-item {
@@ -269,7 +312,7 @@ onUnmounted(() => {
   justify-content: center;
   border-radius: 8px;
   color: var(--el-text-color-secondary);
-  transition: all 0.2s ease;
+  transition: all var(--tech-transition);
 }
 
 .topbar__settings-btn:hover,
@@ -278,12 +321,29 @@ onUnmounted(() => {
   background-color: var(--el-fill-color-light);
 }
 
+html.dark .topbar__settings-btn:hover,
+html.dark .topbar__pin-btn:hover {
+  color: var(--tech-accent);
+  background-color: rgba(var(--tech-accent-rgb), 0.1);
+  box-shadow: 0 0 8px rgba(var(--tech-accent-rgb), 0.15);
+}
+
 .topbar__pin-btn--active {
   color: var(--el-color-primary);
   background-color: var(--el-color-primary-light-9);
 }
 
+html.dark .topbar__pin-btn--active {
+  color: var(--tech-accent);
+  background-color: rgba(var(--tech-accent-rgb), 0.15);
+  box-shadow: 0 0 8px rgba(var(--tech-accent-rgb), 0.2);
+}
+
 .topbar__pin-btn--active:hover {
   background-color: var(--el-color-primary-light-8);
+}
+
+html.dark .topbar__pin-btn--active:hover {
+  background-color: rgba(var(--tech-accent-rgb), 0.2);
 }
 </style>
