@@ -211,7 +211,12 @@ html.dark .sidebar__logo::after {
   transform: translateX(-50%);
   width: 60%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(var(--tech-accent-rgb), 0.4), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--tech-accent-rgb), 0.4),
+    transparent
+  );
 }
 
 .sidebar__logo-icon {
@@ -353,7 +358,12 @@ html.dark .sidebar__footer::before {
   transform: translateX(-50%);
   width: 60%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(var(--tech-accent-rgb), 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--tech-accent-rgb), 0.3),
+    transparent
+  );
 }
 
 .sidebar__collapse-btn {

@@ -123,7 +123,12 @@ html.dark .tool-card::before {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(var(--tech-accent-rgb), 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--tech-accent-rgb), 0.3),
+    transparent
+  );
   opacity: 0;
   transition: opacity var(--tech-transition);
 }
@@ -158,11 +163,9 @@ html.dark .tool-card:hover::before {
 }
 
 html.dark .tool-card__icon {
-  background: linear-gradient(
-    135deg,
+  background: linear-gradient(135deg,
     rgba(var(--tech-accent-rgb), 0.15),
-    rgba(var(--tech-accent-alt-rgb), 0.15)
-  );
+    rgba(var(--tech-accent-alt-rgb), 0.15));
   color: var(--tech-accent);
   border: 1px solid rgba(var(--tech-accent-rgb), 0.1);
 }

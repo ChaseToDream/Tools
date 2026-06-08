@@ -90,42 +90,18 @@ html.dark .home-page__title {
 }
 
 /* 网格项交错入场动画 */
-.home-page__grid > *:nth-child(1) {
-  animation-delay: 0.02s;
-}
-.home-page__grid > *:nth-child(2) {
-  animation-delay: 0.04s;
-}
-.home-page__grid > *:nth-child(3) {
-  animation-delay: 0.06s;
-}
-.home-page__grid > *:nth-child(4) {
-  animation-delay: 0.08s;
-}
-.home-page__grid > *:nth-child(5) {
-  animation-delay: 0.1s;
-}
-.home-page__grid > *:nth-child(6) {
-  animation-delay: 0.12s;
-}
-.home-page__grid > *:nth-child(7) {
-  animation-delay: 0.14s;
-}
-.home-page__grid > *:nth-child(8) {
-  animation-delay: 0.16s;
-}
-.home-page__grid > *:nth-child(9) {
-  animation-delay: 0.18s;
-}
-.home-page__grid > *:nth-child(10) {
-  animation-delay: 0.2s;
-}
-.home-page__grid > *:nth-child(11) {
-  animation-delay: 0.22s;
-}
-.home-page__grid > *:nth-child(12) {
-  animation-delay: 0.24s;
-}
+.home-page__grid > *:nth-child(1) { animation-delay: 0.02s; }
+.home-page__grid > *:nth-child(2) { animation-delay: 0.04s; }
+.home-page__grid > *:nth-child(3) { animation-delay: 0.06s; }
+.home-page__grid > *:nth-child(4) { animation-delay: 0.08s; }
+.home-page__grid > *:nth-child(5) { animation-delay: 0.10s; }
+.home-page__grid > *:nth-child(6) { animation-delay: 0.12s; }
+.home-page__grid > *:nth-child(7) { animation-delay: 0.14s; }
+.home-page__grid > *:nth-child(8) { animation-delay: 0.16s; }
+.home-page__grid > *:nth-child(9) { animation-delay: 0.18s; }
+.home-page__grid > *:nth-child(10) { animation-delay: 0.20s; }
+.home-page__grid > *:nth-child(11) { animation-delay: 0.22s; }
+.home-page__grid > *:nth-child(12) { animation-delay: 0.24s; }
 
 html.dark .home-page__grid > * {
   animation: tech-fade-in 0.35s ease-out both;
